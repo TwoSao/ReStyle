@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Brand Colors -->
+    <Color x:Key="Primary">#6C63FF</Color>
+    <Color x:Key="PrimaryDark">#4B44CC</Color>
+    <Color x:Key="PrimaryLight">#9D97FF</Color>
+    <Color x:Key="Secondary">#FF6584</Color>
+    <Color x:Key="Accent">#43E97B</Color>
+
+    <!-- Neutrals -->
+    <Color x:Key="Background">#F8F9FA</Color>
+    <Color x:Key="Surface">#FFFFFF</Color>
+    <Color x:Key="SurfaceVariant">#F1F3F5</Color>
+    <Color x:Key="OnSurface">#1A1A2E</Color>
+    <Color x:Key="OnSurfaceVariant">#6B7280</Color>
+    <Color x:Key="Divider">#E5E7EB</Color>
+
+    <!-- Dark Mode -->
+    <Color x:Key="BackgroundDark">#0F0F1A</Color>
+    <Color x:Key="SurfaceDark">#1A1A2E</Color>
+    <Color x:Key="SurfaceVariantDark">#252540</Color>
+    <Color x:Key="OnSurfaceDark">#F8F9FA</Color>
+
+    <!-- Status -->
+    <Color x:Key="Success">#22C55E</Color>
+    <Color x:Key="Error">#EF4444</Color>
+    <Color x:Key="Warning">#F59E0B</Color>
+
+    <!-- Text -->
+    <Color x:Key="TextPrimary">#1A1A2E</Color>
+    <Color x:Key="TextSecondary">#6B7280</Color>
+    <Color x:Key="TextOnPrimary">#FFFFFF</Color>
+
+</ResourceDictionary>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:ReStyle.Converters"
+             x:Class="ReStyle.Views.AddItemPage"
+             Title="New Listing">
+
+    <ContentPage.Resources>
+        <conv:ImagePathConverter x:Key="ImagePathConverter" />
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <!-- Image Picker -->
+            <Frame Style="{StaticResource CardFrame}" HeightRequest="200" Padding="0">
+                <Grid>
+                    <Image Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}"
+                           Aspect="AspectFill" IsVisible="{Binding ImagePath, Converter={StaticResource NullToFalseConverter}}" />
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8"
+                                         IsVisible="{Binding ImagePath, Converter={StaticResource InverseBoolConverter}}">
+                        <Label Text="📷" FontSize="48" HorizontalOptions="Center" />
+                        <Label Text="Tap to add photo" Style="{StaticResource SubtitleLabel}" />
+                    </VerticalStackLayout>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding PickImageCommand}" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </Frame>
+
+            <Label Text="Title" Style="{StaticResource SubtitleLabel}" />
+            <Entry Placeholder="e.g. Vintage Denim Jacket" Text="{Binding Title}" Style="{StaticResource ModernEntry}" />
+
+            <Label Text="Description" Style="{StaticResource SubtitleLabel}" />
+            <Editor Placeholder="Describe your item..." Text="{Binding Description}"
+                    HeightRequest="100" BackgroundColor="{StaticResource SurfaceVariant}"
+                    TextColor="{StaticResource TextPrimary}" />
+
+            <Label Text="Price ($)" Style="{StaticResource SubtitleLabel}" />
+            <Entry Placeholder="0.00" Text="{Binding Price}" Keyboard="Numeric" Style="{StaticResource ModernEntry}" />
+
+            <Label Text="Category" Style="{StaticResource SubtitleLabel}" />
+            <Picker ItemsSource="{Binding Categories}" SelectedItem="{Binding Category}"
+                    Title="Select category" TextColor="{StaticResource TextPrimary}"
+                    BackgroundColor="{StaticResource SurfaceVariant}" />
+
+            <Label Text="Size" Style="{StaticResource SubtitleLabel}" />
+            <Picker ItemsSource="{Binding Sizes}" SelectedItem="{Binding Size}"
+                    Title="Select size" TextColor="{StaticResource TextPrimary}"
+                    BackgroundColor="{StaticResource SurfaceVariant}" />
+
+            <Label Text="{Binding ErrorMessage}" TextColor="{StaticResource Error}"
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource NullToFalseConverter}}" />
+
+            <Button Text="Post Listing" Style="{StaticResource PrimaryButton}"
+                    Command="{Binding SaveCommand}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" />
+
+            <Button Text="Cancel" Style="{StaticResource SecondaryButton}"
+                    Command="{Binding CancelCommand}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                               Color="{StaticResource Primary}" HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

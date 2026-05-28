@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dto="clr-namespace:ReStyle.Application.DTOs"
+             xmlns:conv="clr-namespace:ReStyle.Converters"
+             x:Class="ReStyle.Views.HomePage"
+             Title="ReStyle">
+
+    <ContentPage.Resources>
+        <conv:ImagePathConverter x:Key="ImagePathConverter" />
+        <conv:ItemStatusToColorConverter x:Key="StatusColorConverter" />
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Search Bar -->
+        <Frame Grid.Row="0" Margin="16,12" Padding="12,0"
+               BackgroundColor="{StaticResource Surface}" CornerRadius="12"
+               BorderColor="{StaticResource Divider}" HasShadow="False">
+            <Grid ColumnDefinitions="*,Auto">
+                <Entry Grid.Column="0" Placeholder="Search clothes..."
+                       Text="{Binding SearchQuery}"
+                       ReturnCommand="{Binding SearchCommand}"
+                       BackgroundColor="Transparent"
+                       PlaceholderColor="{StaticResource TextSecondary}"
+                       TextColor="{StaticResource TextPrimary}"
+                       VerticalOptions="Center" />
+                <Button Grid.Column="1" Text="🔍" BackgroundColor="Transparent"
+                        TextColor="{StaticResource Primary}"
+                        Command="{Binding SearchCommand}"
+                        HeightRequest="44" WidthRequest="44" Padding="0" />
+            </Grid>
+        </Frame>
+
+        <!-- Items Grid -->
+        <RefreshView Grid.Row="1" Command="{Binding LoadItemsCommand}"
+                     IsRefreshing="{Binding IsBusy}"
+                     RefreshColor="{StaticResource Primary}">
+            <CollectionView ItemsSource="{Binding Items}"
+                            ItemsLayout="VerticalGrid, 2"
+                            Margin="8,0">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="12" Margin="0,60">
+                        <Label Text="👗" FontSize="64" HorizontalOptions="Center" />
+                        <Label Text="No items found" Style="{StaticResource TitleLabel}" HorizontalOptions="Center" />
+                        <Label Text="Be the first to list something!" Style="{StaticResource SubtitleLabel}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="dto:ItemDto">
+                        <Frame Style="{StaticResource CardFrame}" Margin="6">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenItemCommand}"
+                                                      CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
+                            <Grid RowDefinitions="160,Auto">
+                                <!-- Image -->
+                                <Image Grid.Row="0"
+                                       Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}"
+                                       Aspect="AspectFill" HeightRequest="160" />
+                                <!-- Status badge -->
+                                <Frame Grid.Row="0" HorizontalOptions="End" VerticalOptions="Start"
+                                       Margin="8" Padding="6,3" CornerRadius="6" HasShadow="False"
+                                       BackgroundColor="{Binding Status, Converter={StaticResource StatusColorConverter}}">
+                                    <Label Text="{Binding Status}" TextColor="White" FontSize="10" FontAttributes="Bold" />
+                                </Frame>
+                                <!-- Info -->
+                                <VerticalStackLayout Grid.Row="1" Padding="12,8" Spacing="2">
+                                    <Label Text="{Binding Title}" Style="{StaticResource TitleLabel}" FontSize="14"
+                                           LineBreakMode="TailTruncation" MaxLines="1" />
+                                    <Label Text="{Binding SellerUsername}" Style="{StaticResource SubtitleLabel}" FontSize="12" />
+                                    <Label Text="{Binding Price, StringFormat='${0:F2}'}" Style="{StaticResource PriceLabel}" FontSize="16" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+    </Grid>
+
+</ContentPage>

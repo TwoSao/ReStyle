@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:ReStyle.Converters"
+             x:Class="ReStyle.Views.ItemDetailsPage"
+             Title="Item Details">
+
+    <ContentPage.Resources>
+        <conv:ImagePathConverter x:Key="ImagePathConverter" />
+        <conv:ItemStatusToColorConverter x:Key="StatusColorConverter" />
+        <conv:ItemStatusToTextConverter x:Key="StatusTextConverter" />
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Image -->
+            <Image Source="{Binding Item.ImagePath, Converter={StaticResource ImagePathConverter}}"
+                   HeightRequest="320" Aspect="AspectFill" />
+
+            <!-- Content -->
+            <VerticalStackLayout Padding="20" Spacing="12">
+
+                <!-- Title + Status -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Grid.Column="0" Text="{Binding Item.Title}" Style="{StaticResource HeadlineLabel}" />
+                    <Frame Grid.Column="1" Padding="10,5" CornerRadius="8" HasShadow="False"
+                           BackgroundColor="{Binding Item.Status, Converter={StaticResource StatusColorConverter}}"
+                           VerticalOptions="Center">
+                        <Label Text="{Binding Item.Status, Converter={StaticResource StatusTextConverter}}"
+                               TextColor="White" FontSize="12" FontAttributes="Bold" />
+                    </Frame>
+                </Grid>
+
+                <Label Text="{Binding Item.Price, StringFormat='${0:F2}'}" Style="{StaticResource PriceLabel}" />
+
+                <!-- Details chips -->
+                <HorizontalStackLayout Spacing="8">
+                    <Frame Padding="10,5" CornerRadius="20" BackgroundColor="{StaticResource SurfaceVariant}"
+                           HasShadow="False" BorderColor="Transparent">
+                        <Label Text="{Binding Item.Category}" FontSize="13" TextColor="{StaticResource TextSecondary}" />
+                    </Frame>
+                    <Frame Padding="10,5" CornerRadius="20" BackgroundColor="{StaticResource SurfaceVariant}"
+                           HasShadow="False" BorderColor="Transparent">
+                        <Label Text="{Binding Item.Size}" FontSize="13" TextColor="{StaticResource TextSecondary}" />
+                    </Frame>
+                </HorizontalStackLayout>
+
+                <!-- Seller -->
+                <Frame Style="{StaticResource CardFrame}" Padding="16">
+                    <HorizontalStackLayout Spacing="12">
+                        <Frame WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                               BackgroundColor="{StaticResource Primary}" HasShadow="False" Padding="0">
+                            <Label Text="{Binding Item.SellerUsername, Converter={StaticResource ImagePathConverter}}"
+                                   TextColor="White" FontSize="18" FontAttributes="Bold"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Frame>
+                        <VerticalStackLayout VerticalOptions="Center">
+                            <Label Text="Seller" Style="{StaticResource SubtitleLabel}" FontSize="12" />
+                            <Label Text="{Binding Item.SellerUsername}" Style="{StaticResource TitleLabel}" FontSize="15" />
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <!-- Description -->
+                <Label Text="Description" Style="{StaticResource TitleLabel}" />
+                <Label Text="{Binding Item.Description}" Style="{StaticResource SubtitleLabel}"
+                       FontSize="15" LineHeight="1.5" />
+
+                <!-- Status message -->
+                <Label Text="{Binding StatusMessage}" TextColor="{StaticResource Success}"
+                       IsVisible="{Binding StatusMessage, Converter={StaticResource NullToFalseConverter}}"
+                       FontSize="14" HorizontalOptions="Center" />
+
+                <!-- Buy Button -->
+                <Button Text="Buy Now" Style="{StaticResource PrimaryButton}"
+                        Command="{Binding BuyCommand}"
+                        IsVisible="{Binding CanBuy}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                        Margin="0,8" />
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                                   Color="{StaticResource Primary}" HorizontalOptions="Center" />
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

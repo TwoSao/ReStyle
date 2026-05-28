@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ReStyle.Views.BalancePage"
+             Title="Balance">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <!-- Balance Display -->
+            <Frame Style="{StaticResource CardFrame}" Padding="24"
+                   BackgroundColor="{StaticResource Primary}">
+                <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                    <Label Text="Current Balance" TextColor="White" Opacity="0.8" FontSize="14"
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding Balance, StringFormat='${0:F2}'}"
+                           TextColor="White" FontSize="48" FontAttributes="Bold"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Top Up Form -->
+            <Frame Style="{StaticResource CardFrame}" Padding="20">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Top Up Balance" Style="{StaticResource TitleLabel}" />
+
+                    <Label Text="Card Number" Style="{StaticResource SubtitleLabel}" />
+                    <Entry Placeholder="1234 5678 9012 3456" Text="{Binding CardNumber}"
+                           Keyboard="Numeric" Style="{StaticResource ModernEntry}" MaxLength="19" />
+
+                    <Label Text="Amount ($)" Style="{StaticResource SubtitleLabel}" />
+                    <Entry Placeholder="0.00" Text="{Binding Amount}"
+                           Keyboard="Numeric" Style="{StaticResource ModernEntry}" />
+
+                    <!-- Quick amounts -->
+                    <HorizontalStackLayout Spacing="8">
+                        <Button Text="$10" Style="{StaticResource SecondaryButton}" HeightRequest="40"
+                                Padding="16,0" Clicked="OnQuickAmount" CommandParameter="10" />
+                        <Button Text="$25" Style="{StaticResource SecondaryButton}" HeightRequest="40"
+                                Padding="16,0" Clicked="OnQuickAmount" CommandParameter="25" />
+                        <Button Text="$50" Style="{StaticResource SecondaryButton}" HeightRequest="40"
+                                Padding="16,0" Clicked="OnQuickAmount" CommandParameter="50" />
+                        <Button Text="$100" Style="{StaticResource SecondaryButton}" HeightRequest="40"
+                                Padding="16,0" Clicked="OnQuickAmount" CommandParameter="100" />
+                    </HorizontalStackLayout>
+
+                    <Label Text="{Binding Message}"
+                           TextColor="{StaticResource Success}"
+                           IsVisible="{Binding Message, Converter={StaticResource NullToFalseConverter}}"
+                           HorizontalOptions="Center" />
+
+                    <Button Text="Top Up" Style="{StaticResource PrimaryButton}"
+                            Command="{Binding TopUpCommand}"
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" />
+
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                                       Color="{StaticResource Primary}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

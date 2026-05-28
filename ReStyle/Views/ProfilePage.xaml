@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ReStyle.Views.ProfilePage"
+             Title="Profile">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <!-- Avatar -->
+            <Frame WidthRequest="90" HeightRequest="90" CornerRadius="45"
+                   BackgroundColor="{StaticResource Primary}" HasShadow="False"
+                   HorizontalOptions="Center" Padding="0">
+                <Label Text="👤" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Frame>
+
+            <Label Text="{Binding Username}" Style="{StaticResource HeadlineLabel}"
+                   HorizontalOptions="Center" />
+            <Label Text="{Binding Role}" Style="{StaticResource SubtitleLabel}"
+                   HorizontalOptions="Center" />
+
+            <!-- Balance Card -->
+            <Frame Style="{StaticResource CardFrame}" Padding="20"
+                   BackgroundColor="{StaticResource Primary}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Balance" TextColor="White" Opacity="0.8" FontSize="14" />
+                    <Label Text="{Binding Balance, StringFormat='${0:F2}'}"
+                           TextColor="White" FontSize="32" FontAttributes="Bold" />
+                    <Button Text="Top Up Balance" BackgroundColor="White"
+                            TextColor="{StaticResource Primary}" CornerRadius="10"
+                            HeightRequest="44" Command="{Binding GoToBalanceCommand}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Edit Profile -->
+            <Frame Style="{StaticResource CardFrame}" Padding="20">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Edit Profile" Style="{StaticResource TitleLabel}" />
+                    <Entry Placeholder="Username" Text="{Binding Username}" Style="{StaticResource ModernEntry}" />
+                    <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" Style="{StaticResource ModernEntry}" />
+                    <Label Text="{Binding ErrorMessage}" TextColor="{StaticResource Error}"
+                           IsVisible="{Binding ErrorMessage, Converter={StaticResource NullToFalseConverter}}" />
+                    <Button Text="Save" Style="{StaticResource PrimaryButton}" Command="{Binding SaveProfileCommand}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Actions -->
+            <Button Text="Transaction History" Style="{StaticResource SecondaryButton}"
+                    Command="{Binding GoToTransactionsCommand}" />
+
+            <Button Text="Admin Panel" Style="{StaticResource SecondaryButton}"
+                    IsVisible="{Binding IsAdmin}"
+                    Command="{Binding GoToAdminCommand}" />
+
+            <Button Text="Sign Out" Style="{StaticResource DangerButton}"
+                    Command="{Binding LogoutCommand}"
+                    HorizontalOptions="Fill" HeightRequest="52" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

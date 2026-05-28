@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dto="clr-namespace:ReStyle.Application.DTOs"
+             x:Class="ReStyle.Views.AdminPage"
+             Title="Admin Panel">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Tabs -->
+        <HorizontalStackLayout Grid.Row="0" Margin="16,12" Spacing="8">
+            <Button Text="Users" Style="{StaticResource PrimaryButton}"
+                    HeightRequest="40" Padding="20,0" Clicked="OnUsersTab" />
+            <Button Text="Transactions" Style="{StaticResource SecondaryButton}"
+                    HeightRequest="40" Padding="20,0" Clicked="OnTransactionsTab" />
+        </HorizontalStackLayout>
+
+        <!-- Users List -->
+        <CollectionView Grid.Row="1" x:Name="UsersList" Margin="16,0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dto:UserDto">
+                    <Frame Style="{StaticResource CardFrame}" Padding="16">
+                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="{Binding Username}" Style="{StaticResource TitleLabel}" FontSize="15" />
+                                <Label Text="{Binding Email}" Style="{StaticResource SubtitleLabel}" FontSize="12" />
+                                <Label Text="{Binding Role}" Style="{StaticResource SubtitleLabel}" FontSize="12" />
+                            </VerticalStackLayout>
+                            <Button Grid.Column="1"
+                                    Text="{Binding IsBlocked, Converter={StaticResource BlockButtonTextConverter}}"
+                                    Style="{StaticResource SecondaryButton}"
+                                    HeightRequest="36" Padding="10,0"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.BlockUserCommand}"
+                                    CommandParameter="{Binding .}" />
+                            <Button Grid.Column="2" Text="Delete" Style="{StaticResource DangerButton}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteUserCommand}"
+                                    CommandParameter="{Binding .}" />
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>
