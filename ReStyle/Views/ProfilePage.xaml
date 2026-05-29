@@ -1,60 +1,106 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:ReStyle.Converters"
              x:Class="ReStyle.Views.ProfilePage"
              Title="Profile">
+
+    <ContentPage.Resources>
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+        <conv:NullToFalseConverter x:Key="NullToFalseConverter" />
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="16">
 
-            <!-- Avatar -->
-            <Frame WidthRequest="90" HeightRequest="90" CornerRadius="45"
-                   BackgroundColor="{StaticResource Primary}" HasShadow="False"
-                   HorizontalOptions="Center" Padding="0">
-                <Label Text="👤" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center" />
-            </Frame>
+            <!-- ═══════════════════════════════════════ -->
+            <!--              GUEST VIEW                 -->
+            <!-- Only shown when IsGuest=true AND IsUser=false (never for authenticated users) -->
+            <!-- ═══════════════════════════════════════ -->
+            <VerticalStackLayout IsVisible="{Binding IsGuest}" Spacing="16">
 
-            <Label Text="{Binding Username}" Style="{StaticResource HeadlineLabel}"
-                   HorizontalOptions="Center" />
-            <Label Text="{Binding Role}" Style="{StaticResource SubtitleLabel}"
-                   HorizontalOptions="Center" />
+                <Frame WidthRequest="90" HeightRequest="90" CornerRadius="45"
+                       BackgroundColor="{DynamicResource SurfaceVariant}" HasShadow="False"
+                       HorizontalOptions="Center" Padding="0">
+                    <Label Text="👤" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Frame>
 
-            <!-- Balance Card -->
-            <Frame Style="{StaticResource CardFrame}" Padding="20"
-                   BackgroundColor="{StaticResource Primary}">
-                <VerticalStackLayout Spacing="4">
-                    <Label Text="Balance" TextColor="White" Opacity="0.8" FontSize="14" />
-                    <Label Text="{Binding Balance, StringFormat='${0:F2}'}"
-                           TextColor="White" FontSize="32" FontAttributes="Bold" />
-                    <Button Text="Top Up Balance" BackgroundColor="White"
-                            TextColor="{StaticResource Primary}" CornerRadius="10"
-                            HeightRequest="44" Command="{Binding GoToBalanceCommand}" />
-                </VerticalStackLayout>
-            </Frame>
+                <Label Text="Guest" Style="{StaticResource HeadlineLabel}" HorizontalOptions="Center" />
+                <Label Text="You are browsing as a guest" Style="{StaticResource SubtitleLabel}"
+                       HorizontalOptions="Center" />
 
-            <!-- Edit Profile -->
-            <Frame Style="{StaticResource CardFrame}" Padding="20">
-                <VerticalStackLayout Spacing="12">
-                    <Label Text="Edit Profile" Style="{StaticResource TitleLabel}" />
-                    <Entry Placeholder="Username" Text="{Binding Username}" Style="{StaticResource ModernEntry}" />
-                    <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" Style="{StaticResource ModernEntry}" />
-                    <Label Text="{Binding ErrorMessage}" TextColor="{StaticResource Error}"
-                           IsVisible="{Binding ErrorMessage, Converter={StaticResource NullToFalseConverter}}" />
-                    <Button Text="Save" Style="{StaticResource PrimaryButton}" Command="{Binding SaveProfileCommand}" />
-                </VerticalStackLayout>
-            </Frame>
+                <Frame Style="{StaticResource CardFrame}" Padding="20">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Create an account to:" Style="{StaticResource TitleLabel}" FontSize="16" />
+                        <Label Text="✅  Buy and sell fashion items" Style="{StaticResource SubtitleLabel}" />
+                        <Label Text="✅  Track your transactions" Style="{StaticResource SubtitleLabel}" />
+                        <Label Text="✅  Manage your listings" Style="{StaticResource SubtitleLabel}" />
+                        <Label Text="✅  Top up your balance" Style="{StaticResource SubtitleLabel}" />
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- Actions -->
-            <Button Text="Transaction History" Style="{StaticResource SecondaryButton}"
-                    Command="{Binding GoToTransactionsCommand}" />
+                <Button Text="Sign In" Style="{StaticResource PrimaryButton}"
+                        Command="{Binding GoToLoginCommand}" />
 
-            <Button Text="Admin Panel" Style="{StaticResource SecondaryButton}"
-                    IsVisible="{Binding IsAdmin}"
-                    Command="{Binding GoToAdminCommand}" />
+                <Button Text="Create Account" Style="{StaticResource SecondaryButton}"
+                        Command="{Binding GoToRegisterCommand}" />
 
-            <Button Text="Sign Out" Style="{StaticResource DangerButton}"
-                    Command="{Binding LogoutCommand}"
-                    HorizontalOptions="Fill" HeightRequest="52" />
+            </VerticalStackLayout>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!--              USER VIEW                  -->
+            <!-- Only shown when IsUser=true (IsAuthenticated=true) -->
+            <!-- ═══════════════════════════════════════ -->
+            <VerticalStackLayout IsVisible="{Binding IsUser}" Spacing="16">
+
+                <Frame WidthRequest="90" HeightRequest="90" CornerRadius="45"
+                       BackgroundColor="{DynamicResource Primary}" HasShadow="False"
+                       HorizontalOptions="Center" Padding="0">
+                    <Label Text="👤" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Frame>
+
+                <Label Text="{Binding Username}" Style="{StaticResource HeadlineLabel}"
+                       HorizontalOptions="Center" />
+                <Label Text="{Binding Role}" Style="{StaticResource SubtitleLabel}"
+                       HorizontalOptions="Center" />
+
+                <!-- Balance Card -->
+                <Frame Style="{StaticResource CardFrame}" Padding="20"
+                       BackgroundColor="{DynamicResource Primary}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Balance" TextColor="White" Opacity="0.8" FontSize="14" />
+                        <Label Text="{Binding Balance, StringFormat='${0:F2}'}"
+                               TextColor="White" FontSize="32" FontAttributes="Bold" />
+                        <Button Text="Top Up Balance" BackgroundColor="White"
+                                TextColor="{DynamicResource Primary}" CornerRadius="10"
+                                HeightRequest="44" Command="{Binding GoToBalanceCommand}" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Edit Profile -->
+                <Frame Style="{StaticResource CardFrame}" Padding="20">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Edit Profile" Style="{StaticResource TitleLabel}" />
+                        <Entry Placeholder="Username" Text="{Binding Username}" Style="{StaticResource ModernEntry}" />
+                        <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" Style="{StaticResource ModernEntry}" />
+                        <Label Text="{Binding ErrorMessage}" TextColor="{DynamicResource Error}"
+                               IsVisible="{Binding ErrorMessage, Converter={StaticResource NullToFalseConverter}}" />
+                        <Button Text="Save" Style="{StaticResource PrimaryButton}" Command="{Binding SaveProfileCommand}" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button Text="Transaction History" Style="{StaticResource SecondaryButton}"
+                        Command="{Binding GoToTransactionsCommand}" />
+
+                <Button Text="Admin Panel" Style="{StaticResource SecondaryButton}"
+                        IsVisible="{Binding IsAdmin}"
+                        Command="{Binding GoToAdminCommand}" />
+
+                <Button Text="Sign Out" Style="{StaticResource DangerButton}"
+                        Command="{Binding LogoutCommand}"
+                        HorizontalOptions="Fill" HeightRequest="52" />
+
+            </VerticalStackLayout>
 
         </VerticalStackLayout>
     </ScrollView>

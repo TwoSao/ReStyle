@@ -53,7 +53,7 @@
             <!-- Guest mode -->
             <Button Text="Browse as Guest" Style="{StaticResource SecondaryButton}"
                     Margin="0,8,0,0"
-                    Command="{Binding GoToRegisterCommand}" />
+                    Command="{Binding ContinueAsGuestCommand}" />
 
         </VerticalStackLayout>
     </ScrollView>

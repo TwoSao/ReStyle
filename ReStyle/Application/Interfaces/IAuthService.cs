@@ -8,7 +8,10 @@ public interface IAuthService
     Task<(bool Success, string Message, User? User)> RegisterAsync(RegisterRequest request);
     Task<(bool Success, string Message, User? User)> LoginAsync(LoginRequest request);
     void Logout();
+    void ContinueAsGuest();
     User? CurrentUser { get; }
     bool IsAuthenticated { get; }
+    bool IsGuest { get; }
     bool IsAdmin { get; }
+    event EventHandler AuthStateChanged;
 }

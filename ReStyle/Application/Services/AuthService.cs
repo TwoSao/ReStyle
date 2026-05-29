@@ -10,17 +10,30 @@ namespace ReStyle.Application.Services;
 public class AuthService : IAuthService
 {
     private readonly IServiceProvider _serviceProvider;
+    private bool _isGuest;
+
     public User? CurrentUser { get; private set; }
     public bool IsAuthenticated => CurrentUser != null;
+    // Guest only when explicitly set AND not authenticated — authenticated state always wins
+    public bool IsGuest => !IsAuthenticated && _isGuest;
     public bool IsAdmin => CurrentUser?.Role == UserRole.Admin;
+
+    public event EventHandler? AuthStateChanged;
 
     public AuthService(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
 
     private IUserRepository GetRepo()
     {
-        // Create a scope to resolve scoped repository from singleton service
         var scope = _serviceProvider.CreateScope();
         return scope.ServiceProvider.GetRequiredService<IUserRepository>();
+    }
+
+    public void ContinueAsGuest()
+    {
+        // Guard: never allow guest mode to overwrite an authenticated session
+        if (IsAuthenticated) return;
+        _isGuest = true;
+        AuthStateChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public async Task<(bool Success, string Message, User? User)> RegisterAsync(RegisterRequest request)
@@ -50,6 +63,8 @@ public class AuthService : IAuthService
         await repo.AddAsync(user);
         await repo.SaveChangesAsync();
         CurrentUser = user;
+        _isGuest = false;
+        AuthStateChanged?.Invoke(this, EventArgs.Empty);
         return (true, "Registration successful.", user);
     }
 
@@ -64,8 +79,15 @@ public class AuthService : IAuthService
             return (false, "Your account has been blocked.", null);
 
         CurrentUser = user;
+        _isGuest = false;
+        AuthStateChanged?.Invoke(this, EventArgs.Empty);
         return (true, "Login successful.", user);
     }
 
-    public void Logout() => CurrentUser = null;
+    public void Logout()
+    {
+        CurrentUser = null;
+        _isGuest = false; // logout → unauthenticated, not guest — user must explicitly choose guest
+        AuthStateChanged?.Invoke(this, EventArgs.Empty);
+    }
 }

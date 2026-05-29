@@ -34,7 +34,7 @@ public static class MauiProgram
         builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
         builder.Services.AddScoped<IBalanceTopUpRepository, BalanceTopUpRepository>();
 
-        // Services (Singleton for auth session state)
+        // Services
         builder.Services.AddSingleton<IAuthService, AuthService>();
         builder.Services.AddScoped<IItemService, ItemService>();
         builder.Services.AddScoped<IPurchaseService, PurchaseService>();
@@ -51,7 +51,8 @@ public static class MauiProgram
         builder.Services.AddTransient<AddItemViewModel>();
         builder.Services.AddTransient<EditItemViewModel>();
         builder.Services.AddTransient<MyItemsViewModel>();
-        builder.Services.AddTransient<ProfileViewModel>();
+        // ProfileViewModel is Singleton so it survives BuildTabs() rebuilds and always holds current auth state
+        builder.Services.AddSingleton<ProfileViewModel>();
         builder.Services.AddTransient<BalanceViewModel>();
         builder.Services.AddTransient<TransactionsViewModel>();
         builder.Services.AddTransient<AdminViewModel>();
@@ -64,10 +65,14 @@ public static class MauiProgram
         builder.Services.AddTransient<AddItemPage>();
         builder.Services.AddTransient<EditItemPage>();
         builder.Services.AddTransient<MyItemsPage>();
-        builder.Services.AddTransient<ProfilePage>();
+        // ProfilePage is Singleton — same instance reused across BuildTabs() calls, OnAppearing always fires correctly
+        builder.Services.AddSingleton<ProfilePage>();
         builder.Services.AddTransient<BalancePage>();
         builder.Services.AddTransient<TransactionsPage>();
         builder.Services.AddTransient<AdminPage>();
+
+        // Shell (singleton — manages tab visibility)
+        builder.Services.AddSingleton<AppShell>();
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -75,7 +80,6 @@ public static class MauiProgram
 
         var app = builder.Build();
 
-        // Initialize DB (create + migrate + seed)
         InitializeDatabase(app.Services);
 
         return app;

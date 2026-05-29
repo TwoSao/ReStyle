@@ -54,14 +54,14 @@ public partial class HomeViewModel : ObservableObject
     [RelayCommand]
     private async Task GoToAddItemAsync()
     {
-        if (!_authService.IsAuthenticated) { await NavigationService.GoToAsync("//login"); return; }
+        if (!_authService.IsAuthenticated) { await NavigationService.GoToAsync("login"); return; }
         await NavigationService.GoToAsync("additem");
     }
 
     [RelayCommand]
     private async Task GoToProfileAsync()
     {
-        if (!_authService.IsAuthenticated) { await NavigationService.GoToAsync("//login"); return; }
+        if (!_authService.IsAuthenticated) { await NavigationService.GoToAsync("login"); return; }
         await NavigationService.GoToAsync("//profile");
     }
 }

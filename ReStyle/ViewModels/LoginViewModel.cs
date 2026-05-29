@@ -28,14 +28,21 @@ public partial class LoginViewModel : ObservableObject
         }
 
         IsBusy = true;
-        var (success, message, user) = await _authService.LoginAsync(new LoginRequest(Email, Password));
+        var (success, message, _) = await _authService.LoginAsync(new LoginRequest(Email, Password));
         IsBusy = false;
 
         if (!success) { ErrorMessage = message; return; }
 
-        await NavigationService.GoToAsync("//home");
+        // AuthStateChanged fires → AppShell rebuilds tabs → navigates to //home
     }
 
     [RelayCommand]
-    private async Task GoToRegisterAsync() => await NavigationService.GoToAsync("//register");
+    private async Task GoToRegisterAsync() => await NavigationService.GoToAsync("register");
+
+    [RelayCommand]
+    private void ContinueAsGuest()
+    {
+        // Sets guest state → AuthStateChanged fires → AppShell rebuilds tabs → navigates to //home
+        _authService.ContinueAsGuest();
+    }
 }

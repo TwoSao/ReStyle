@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using ReStyle.Application.DTOs;
 using ReStyle.Application.Interfaces;
 using ReStyle.Helpers;
@@ -9,7 +10,7 @@ namespace ReStyle.ViewModels;
 public partial class ProfileViewModel : ObservableObject
 {
     private readonly IAuthService _authService;
-    private readonly IUserService _userService;
+    private readonly IServiceProvider _services;
 
     [ObservableProperty] private string _username = string.Empty;
     [ObservableProperty] private string _email = string.Empty;
@@ -18,37 +19,47 @@ public partial class ProfileViewModel : ObservableObject
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private bool _isBusy;
     [ObservableProperty] private bool _isAdmin;
+    [ObservableProperty] private bool _isGuest;
+    [ObservableProperty] private bool _isUser;
 
-    public ProfileViewModel(IAuthService authService, IUserService userService)
+    public ProfileViewModel(IAuthService authService, IServiceProvider services)
     {
         _authService = authService;
-        _userService = userService;
+        _services = services;
+        _authService.AuthStateChanged += (_, _) => MainThread.BeginInvokeOnMainThread(Refresh);
     }
 
-    public void Initialize()
+    public void Refresh()
     {
-        var user = _authService.CurrentUser;
-        if (user == null) return;
+        IsUser = _authService.IsAuthenticated;
+        IsGuest = _authService.IsGuest;
+        IsAdmin = _authService.IsAdmin;
+
+        if (!_authService.IsAuthenticated) return;
+
+        var user = _authService.CurrentUser!;
         Username = user.Username;
         Email = user.Email;
         Balance = user.Balance;
         Role = user.Role.ToString();
-        IsAdmin = _authService.IsAdmin;
     }
 
     [RelayCommand]
     private async Task SaveProfileAsync()
     {
+        if (_authService.CurrentUser is null) return;
         IsBusy = true;
-        var (success, message) = await _userService.UpdateProfileAsync(
-            _authService.CurrentUser!.UserId,
+        using var scope = _services.CreateScope();
+        var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+        var (success, message) = await userService.UpdateProfileAsync(
+            _authService.CurrentUser.UserId,
             new UpdateProfileRequest(Username, Email));
         IsBusy = false;
         ErrorMessage = success ? string.Empty : message;
         if (success)
         {
-            _authService.CurrentUser!.Username = Username;
-            _authService.CurrentUser!.Email = Email;
+            _authService.CurrentUser.Username = Username;
+            _authService.CurrentUser.Email = Email;
         }
     }
 
@@ -59,12 +70,14 @@ public partial class ProfileViewModel : ObservableObject
     private async Task GoToTransactionsAsync() => await NavigationService.GoToAsync("//transactions");
 
     [RelayCommand]
-    private async Task GoToAdminAsync() => await NavigationService.GoToAsync("//admin");
+    private async Task GoToAdminAsync() => await NavigationService.GoToAsync("admin");
 
     [RelayCommand]
-    private void Logout()
-    {
-        _authService.Logout();
-        Shell.Current.GoToAsync("//login");
-    }
+    private async Task GoToLoginAsync() => await NavigationService.GoToAsync("login");
+
+    [RelayCommand]
+    private async Task GoToRegisterAsync() => await NavigationService.GoToAsync("register");
+
+    [RelayCommand]
+    private void Logout() => _authService.Logout();
 }

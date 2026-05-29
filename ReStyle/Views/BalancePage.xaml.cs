@@ -1,3 +1,4 @@
+using ReStyle.Application.Interfaces;
 using ReStyle.ViewModels;
 
 namespace ReStyle.Views;
@@ -5,17 +6,24 @@ namespace ReStyle.Views;
 public partial class BalancePage : ContentPage
 {
     private readonly BalanceViewModel _vm;
+    private readonly IAuthService _authService;
 
-    public BalancePage(BalanceViewModel vm)
+    public BalancePage(BalanceViewModel vm, IAuthService authService)
     {
         InitializeComponent();
         _vm = vm;
+        _authService = authService;
         BindingContext = vm;
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        if (!_authService.IsAuthenticated)
+        {
+            Shell.Current.GoToAsync("login");
+            return;
+        }
         _vm.Initialize();
     }
 

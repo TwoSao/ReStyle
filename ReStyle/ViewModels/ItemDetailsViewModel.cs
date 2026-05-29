@@ -33,6 +33,11 @@ public partial class ItemDetailsViewModel : ObservableObject
     [RelayCommand]
     private async Task BuyAsync()
     {
+        if (!_authService.IsAuthenticated)
+        {
+            await Shell.Current.GoToAsync("login");
+            return;
+        }
         if (Item == null || _authService.CurrentUser == null) return;
         IsBusy = true;
         var (success, message) = await _purchaseService.PurchaseItemAsync(_authService.CurrentUser.UserId, Item.ItemId);

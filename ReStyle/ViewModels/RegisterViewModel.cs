@@ -30,9 +30,9 @@ public partial class RegisterViewModel : ObservableObject
         IsBusy = false;
 
         if (!success) { ErrorMessage = message; return; }
-        await NavigationService.GoToAsync("//home");
+        // AuthStateChanged fires → AppShell rebuilds tabs → navigates to //home
     }
 
     [RelayCommand]
-    private async Task GoToLoginAsync() => await NavigationService.GoToAsync("//login");
+    private async Task GoToLoginAsync() => await NavigationService.GoToAsync("login");
 }
