@@ -23,7 +23,16 @@ public partial class BalanceViewModel : ObservableObject
         _balanceService = balanceService;
     }
 
-    public void Initialize() => Balance = _authService.CurrentUser?.Balance ?? 0;
+    public void Initialize() 
+    {
+        Balance = _authService.CurrentUser?.Balance ?? 0;
+        _authService.AuthStateChanged += OnAuthStateChanged;
+    }
+
+    public void Cleanup() => _authService.AuthStateChanged -= OnAuthStateChanged;
+
+    private void OnAuthStateChanged(object? sender, EventArgs e) =>
+        MainThread.BeginInvokeOnMainThread(() => Balance = _authService.CurrentUser?.Balance ?? 0);
 
     [RelayCommand]
     private async Task TopUpAsync()
@@ -43,6 +52,7 @@ public partial class BalanceViewModel : ObservableObject
             Balance = _authService.CurrentUser.Balance;
             Amount = string.Empty;
             CardNumber = string.Empty;
+            _authService.NotifyBalanceChanged();
         }
     }
 

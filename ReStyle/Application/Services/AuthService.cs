@@ -87,7 +87,9 @@ public class AuthService : IAuthService
     public void Logout()
     {
         CurrentUser = null;
-        _isGuest = false; // logout → unauthenticated, not guest — user must explicitly choose guest
+        _isGuest = false;
         AuthStateChanged?.Invoke(this, EventArgs.Empty);
     }
+
+    public void NotifyBalanceChanged() => AuthStateChanged?.Invoke(this, EventArgs.Empty);
 }

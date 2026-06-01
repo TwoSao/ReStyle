@@ -1,20 +1,16 @@
 using ReStyle.Application.DTOs;
 using ReStyle.Application.Interfaces;
 using ReStyle.Core.Entities;
-using ReStyle.Core.Interfaces;
+using ReStyle.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ReStyle.Application.Services;
 
 public class BalanceService : IBalanceService
 {
-    private readonly IUserRepository _userRepo;
-    private readonly IBalanceTopUpRepository _topUpRepo;
+    private readonly ReStyleDbContext _context;
 
-    public BalanceService(IUserRepository userRepo, IBalanceTopUpRepository topUpRepo)
-    {
-        _userRepo = userRepo;
-        _topUpRepo = topUpRepo;
-    }
+    public BalanceService(ReStyleDbContext context) => _context = context;
 
     public async Task<(bool Success, string Message)> TopUpAsync(int userId, TopUpRequest request)
     {
@@ -22,25 +18,26 @@ public class BalanceService : IBalanceService
         if (string.IsNullOrWhiteSpace(request.CardNumber) || request.CardNumber.Length < 16)
             return (false, "Invalid card number.");
 
-        var user = await _userRepo.GetByIdAsync(userId);
+        var user = await _context.Users.FindAsync(userId);
         if (user == null) return (false, "User not found.");
 
         user.Balance += request.Amount;
-        var masked = "**** **** **** " + request.CardNumber[^4..];
 
-        var topUp = new BalanceTopUp
+        _context.BalanceTopUps.Add(new BalanceTopUp
         {
             UserId = userId,
             Amount = request.Amount,
-            CardNumberMasked = masked
-        };
+            CardNumberMasked = "**** **** **** " + request.CardNumber[^4..]
+        });
 
-        await _topUpRepo.AddAsync(topUp);
-        await _topUpRepo.SaveChangesAsync();
+        await _context.SaveChangesAsync();
         return (true, $"Balance topped up by {request.Amount:C}.");
     }
 
     public async Task<IEnumerable<BalanceTopUpDto>> GetTopUpHistoryAsync(int userId) =>
-        (await _topUpRepo.GetByUserAsync(userId))
-            .Select(t => new BalanceTopUpDto(t.TopUpId, t.Amount, t.CardNumberMasked, t.CreatedAt));
+        await _context.BalanceTopUps
+            .Where(t => t.UserId == userId)
+            .OrderByDescending(t => t.CreatedAt)
+            .Select(t => new BalanceTopUpDto(t.TopUpId, t.Amount, t.CardNumberMasked, t.CreatedAt))
+            .ToListAsync();
 }

@@ -1,27 +1,33 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using ReStyle.Application.DTOs;
 using ReStyle.Application.Interfaces;
 using ReStyle.Helpers;
 
 namespace ReStyle.ViewModels;
 
-public partial class HomeViewModel : ObservableObject
+public partial class HomeViewModel : ObservableObject, IRecipient<ItemsChangedMessage>
 {
-    private readonly IItemService _itemService;
     private readonly IAuthService _authService;
+    private readonly IServiceProvider _services;
 
     [ObservableProperty] private ObservableCollection<ItemDto> _items = new();
     [ObservableProperty] private string _searchQuery = string.Empty;
     [ObservableProperty] private bool _isBusy;
     [ObservableProperty] private bool _isAuthenticated;
 
-    public HomeViewModel(IItemService itemService, IAuthService authService)
+    public HomeViewModel(IAuthService authService, IServiceProvider services)
     {
-        _itemService = itemService;
         _authService = authService;
+        _services = services;
+        WeakReferenceMessenger.Default.Register(this);
     }
+
+    public void Receive(ItemsChangedMessage message) =>
+        MainThread.BeginInvokeOnMainThread(async () => await LoadItemsAsync());
 
     public async Task InitializeAsync()
     {
@@ -33,7 +39,9 @@ public partial class HomeViewModel : ObservableObject
     private async Task LoadItemsAsync()
     {
         IsBusy = true;
-        var items = await _itemService.GetAvailableItemsAsync();
+        using var scope = _services.CreateScope();
+        var itemService = scope.ServiceProvider.GetRequiredService<IItemService>();
+        var items = await itemService.GetAvailableItemsAsync();
         Items = new ObservableCollection<ItemDto>(items);
         IsBusy = false;
     }
@@ -42,7 +50,9 @@ public partial class HomeViewModel : ObservableObject
     private async Task SearchAsync()
     {
         IsBusy = true;
-        var items = await _itemService.SearchItemsAsync(SearchQuery);
+        using var scope = _services.CreateScope();
+        var itemService = scope.ServiceProvider.GetRequiredService<IItemService>();
+        var items = await itemService.SearchItemsAsync(SearchQuery);
         Items = new ObservableCollection<ItemDto>(items);
         IsBusy = false;
     }

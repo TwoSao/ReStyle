@@ -23,35 +23,36 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // Database
+        // Database — Transient: each service gets its own DbContext, no EF identity-map cache between calls
         var dbPath = Path.Combine(FileSystem.AppDataDirectory, "restyle.db");
         builder.Services.AddDbContext<ReStyleDbContext>(options =>
-            options.UseSqlite($"Data Source={dbPath}"));
+            options.UseSqlite($"Data Source={dbPath}"),
+            ServiceLifetime.Transient, ServiceLifetime.Transient);
 
-        // Repositories
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
-        builder.Services.AddScoped<IItemRepository, ItemRepository>();
-        builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
-        builder.Services.AddScoped<IBalanceTopUpRepository, BalanceTopUpRepository>();
+        // Repositories (Transient: each operation gets a fresh DbContext to avoid EF cache issues)
+        builder.Services.AddTransient<IUserRepository, UserRepository>();
+        builder.Services.AddTransient<IItemRepository, ItemRepository>();
+        builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
+        builder.Services.AddTransient<IBalanceTopUpRepository, BalanceTopUpRepository>();
 
-        // Services
+        // Services (Transient: fresh repos + DbContext per call)
         builder.Services.AddSingleton<IAuthService, AuthService>();
-        builder.Services.AddScoped<IItemService, ItemService>();
-        builder.Services.AddScoped<IPurchaseService, PurchaseService>();
-        builder.Services.AddScoped<IBalanceService, BalanceService>();
-        builder.Services.AddScoped<ITransactionService, TransactionService>();
-        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddTransient<IItemService, ItemService>();
+        builder.Services.AddTransient<IPurchaseService, PurchaseService>();
+        builder.Services.AddTransient<IBalanceService, BalanceService>();
+        builder.Services.AddTransient<ITransactionService, TransactionService>();
+        builder.Services.AddTransient<IUserService, UserService>();
         builder.Services.AddSingleton<IImageService, ImageService>();
 
         // ViewModels
         builder.Services.AddTransient<LoginViewModel>();
         builder.Services.AddTransient<RegisterViewModel>();
-        builder.Services.AddTransient<HomeViewModel>();
+        // Singleton: survives BuildTabs() rebuilds + WeakReferenceMessenger subscription stays alive
+        builder.Services.AddSingleton<HomeViewModel>();
         builder.Services.AddTransient<ItemDetailsViewModel>();
         builder.Services.AddTransient<AddItemViewModel>();
         builder.Services.AddTransient<EditItemViewModel>();
-        builder.Services.AddTransient<MyItemsViewModel>();
-        // ProfileViewModel is Singleton so it survives BuildTabs() rebuilds and always holds current auth state
+        builder.Services.AddSingleton<MyItemsViewModel>();
         builder.Services.AddSingleton<ProfileViewModel>();
         builder.Services.AddTransient<BalanceViewModel>();
         builder.Services.AddTransient<TransactionsViewModel>();
@@ -60,12 +61,12 @@ public static class MauiProgram
         // Pages
         builder.Services.AddTransient<LoginPage>();
         builder.Services.AddTransient<RegisterPage>();
-        builder.Services.AddTransient<HomePage>();
+        // Singleton: same VM instance, OnAppearing fires correctly
+        builder.Services.AddSingleton<HomePage>();
         builder.Services.AddTransient<ItemDetailsPage>();
         builder.Services.AddTransient<AddItemPage>();
         builder.Services.AddTransient<EditItemPage>();
-        builder.Services.AddTransient<MyItemsPage>();
-        // ProfilePage is Singleton — same instance reused across BuildTabs() calls, OnAppearing always fires correctly
+        builder.Services.AddSingleton<MyItemsPage>();
         builder.Services.AddSingleton<ProfilePage>();
         builder.Services.AddTransient<BalancePage>();
         builder.Services.AddTransient<TransactionsPage>();

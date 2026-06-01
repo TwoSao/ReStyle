@@ -44,7 +44,7 @@ public class InverseBoolConverter : IValueConverter
 public class NullToFalseConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
-        value != null;
+        value is string s ? !string.IsNullOrEmpty(s) : value != null;
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
         throw new NotImplementedException();

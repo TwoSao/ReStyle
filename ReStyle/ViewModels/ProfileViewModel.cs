@@ -60,6 +60,7 @@ public partial class ProfileViewModel : ObservableObject
         {
             _authService.CurrentUser.Username = Username;
             _authService.CurrentUser.Email = Email;
+            _authService.NotifyBalanceChanged(); // reuse to broadcast any user data change
         }
     }
 

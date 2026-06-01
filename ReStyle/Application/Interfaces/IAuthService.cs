@@ -14,4 +14,5 @@ public interface IAuthService
     bool IsGuest { get; }
     bool IsAdmin { get; }
     event EventHandler AuthStateChanged;
+    void NotifyBalanceChanged();
 }

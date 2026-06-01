@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:ReStyle.Converters"
              x:Class="ReStyle.Views.BalancePage"
              Title="Balance">
+
+    <ContentPage.Resources>
+        <conv:NullToFalseConverter x:Key="NullToFalseConverter" />
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="16">

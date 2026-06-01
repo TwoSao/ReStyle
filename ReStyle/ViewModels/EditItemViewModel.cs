@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using ReStyle.Application.DTOs;
 using ReStyle.Application.Interfaces;
 using ReStyle.Helpers;
@@ -23,8 +24,8 @@ public partial class EditItemViewModel : ObservableObject
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private bool _isBusy;
 
-    public List<string> Categories { get; } = new() { "Tops", "Bottoms", "Dresses", "Outerwear", "Shoes", "Accessories", "Other" };
-    public List<string> Sizes { get; } = new() { "XS", "S", "M", "L", "XL", "XXL", "One Size" };
+    public List<string> Categories { get; } = ["Tops", "Bottoms", "Dresses", "Outerwear", "Shoes", "Accessories", "Other"];
+    public List<string> Sizes { get; } = ["XS", "S", "M", "L", "XL", "XXL", "One Size"];
 
     public EditItemViewModel(IItemService itemService, IAuthService authService, IImageService imageService)
     {
@@ -69,7 +70,9 @@ public partial class EditItemViewModel : ObservableObject
         IsBusy = false;
 
         if (!success) { ErrorMessage = message; return; }
-        await NavigationService.GoToAsync("//myitems");
+
+        WeakReferenceMessenger.Default.Send(new ItemsChangedMessage());
+        await NavigationService.GoBackAsync();
     }
 
     [RelayCommand]

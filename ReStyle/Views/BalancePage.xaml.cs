@@ -27,6 +27,12 @@ public partial class BalancePage : ContentPage
         _vm.Initialize();
     }
 
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        _vm.Cleanup();
+    }
+
     private void OnQuickAmount(object sender, EventArgs e)
     {
         if (sender is Button btn && btn.CommandParameter is string val)

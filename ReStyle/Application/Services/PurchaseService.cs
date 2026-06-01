@@ -2,68 +2,71 @@ using Microsoft.EntityFrameworkCore;
 using ReStyle.Application.Interfaces;
 using ReStyle.Core.Entities;
 using ReStyle.Core.Enums;
-using ReStyle.Core.Interfaces;
 using ReStyle.Infrastructure.Data;
 
 namespace ReStyle.Application.Services;
 
-/// <summary>
-/// Handles atomic purchase: debit buyer, credit seller, create transaction, mark item sold.
-/// </summary>
 public class PurchaseService : IPurchaseService
 {
-    private readonly IUserRepository _userRepo;
-    private readonly IItemRepository _itemRepo;
-    private readonly ITransactionRepository _transactionRepo;
     private readonly ReStyleDbContext _context;
+    private readonly IAuthService _authService;
 
-    public PurchaseService(IUserRepository userRepo, IItemRepository itemRepo,
-        ITransactionRepository transactionRepo, ReStyleDbContext context)
+    public PurchaseService(ReStyleDbContext context, IAuthService authService)
     {
-        _userRepo = userRepo;
-        _itemRepo = itemRepo;
-        _transactionRepo = transactionRepo;
         _context = context;
+        _authService = authService;
     }
 
     public async Task<(bool Success, string Message)> PurchaseItemAsync(int buyerId, int itemId)
     {
-        var item = await _itemRepo.GetItemWithDetailsAsync(itemId);
+        var item = await _context.Items.Include(i => i.User).FirstOrDefaultAsync(i => i.ItemId == itemId);
         if (item == null) return (false, "Item not found.");
         if (item.Status != ItemStatus.Available) return (false, "Item is no longer available.");
         if (item.UserId == buyerId) return (false, "You cannot buy your own item.");
 
-        var buyer = await _userRepo.GetByIdAsync(buyerId);
+        var buyer = await _context.Users.FindAsync(buyerId);
         if (buyer == null) return (false, "Buyer not found.");
-        if (buyer.Balance < item.Price) return (false, "Insufficient balance.");
 
-        var seller = await _userRepo.GetByIdAsync(item.UserId);
+        // Use in-memory balance from CurrentUser — it reflects top-ups done in this session
+        var effectiveBalance = _authService.CurrentUser?.UserId == buyerId
+            ? _authService.CurrentUser.Balance
+            : buyer.Balance;
+
+        if (effectiveBalance < item.Price) return (false, "Insufficient balance.");
+
+        var seller = await _context.Users.FindAsync(item.UserId);
         if (seller == null) return (false, "Seller not found.");
 
-        // Atomic transaction
-        await using var dbTransaction = await _context.Database.BeginTransactionAsync();
+        await using var tx = await _context.Database.BeginTransactionAsync();
         try
         {
-            buyer.Balance -= item.Price;
+            buyer.Balance = effectiveBalance - item.Price;
             seller.Balance += item.Price;
             item.Status = ItemStatus.Sold;
 
-            var transaction = new Transaction
+            _context.Transactions.Add(new Transaction
             {
                 BuyerId = buyerId,
                 SellerId = item.UserId,
                 ItemId = itemId,
                 Amount = item.Price
-            };
+            });
 
-            await _transactionRepo.AddAsync(transaction);
             await _context.SaveChangesAsync();
-            await dbTransaction.CommitAsync();
+            await tx.CommitAsync();
+
+            // Sync in-memory session
+            if (_authService.CurrentUser?.UserId == buyerId)
+            {
+                _authService.CurrentUser.Balance = buyer.Balance;
+                _authService.NotifyBalanceChanged();
+            }
+
             return (true, "Purchase successful!");
         }
         catch
         {
-            await dbTransaction.RollbackAsync();
+            await tx.RollbackAsync();
             return (false, "Purchase failed. Please try again.");
         }
     }

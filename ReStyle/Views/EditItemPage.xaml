@@ -7,6 +7,7 @@
 
     <ContentPage.Resources>
         <conv:ImagePathConverter x:Key="ImagePathConverter" />
+        <conv:NullToFalseConverter x:Key="NullToFalseConverter" />
     </ContentPage.Resources>
 
     <ScrollView>
