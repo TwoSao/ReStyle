@@ -4,7 +4,7 @@
              xmlns:dto="clr-namespace:ReStyle.Application.DTOs"
              xmlns:conv="clr-namespace:ReStyle.Converters"
              x:Class="ReStyle.Views.AdminPage"
-             Title="Admin Panel">
+             Title="Administraator">
 
     <ContentPage.Resources>
         <conv:BlockButtonTextConverter x:Key="BlockButtonTextConverter" />
@@ -16,7 +16,7 @@
             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
                                  Spacing="12" Margin="0,80">
                 <Label Text="👥" FontSize="72" HorizontalOptions="Center" />
-                <Label Text="No users found" Style="{StaticResource H2Label}"
+                <Label Text="Kasutajaid ei leitud" Style="{StaticResource H2Label}"
                        HorizontalOptions="Center" />
             </VerticalStackLayout>
         </CollectionView.EmptyView>

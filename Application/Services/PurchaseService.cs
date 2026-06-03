@@ -20,22 +20,22 @@ public class PurchaseService : IPurchaseService
     public async Task<(bool Success, string Message)> PurchaseItemAsync(int buyerId, int itemId)
     {
         var item = await _context.Items.Include(i => i.User).FirstOrDefaultAsync(i => i.ItemId == itemId);
-        if (item == null) return (false, "Item not found.");
-        if (item.Status != ItemStatus.Available) return (false, "Item is no longer available.");
-        if (item.UserId == buyerId) return (false, "You cannot buy your own item.");
+        if (item == null) return (false, "Artiklit ei leitud.");
+        if (item.Status != ItemStatus.Available) return (false, "Artikkel ei ole enam saadaval.");
+        if (item.UserId == buyerId) return (false, "Sa ei saa osta oma artiklit.");
 
         var buyer = await _context.Users.FindAsync(buyerId);
-        if (buyer == null) return (false, "Buyer not found.");
+        if (buyer == null) return (false, "Ostjat ei leitud.");
 
         // Use in-memory balance from CurrentUser — it reflects top-ups done in this session
         var effectiveBalance = _authService.CurrentUser?.UserId == buyerId
             ? _authService.CurrentUser.Balance
             : buyer.Balance;
 
-        if (effectiveBalance < item.Price) return (false, "Insufficient balance.");
+        if (effectiveBalance < item.Price) return (false, "Saldo ei ole piisav.");
 
         var seller = await _context.Users.FindAsync(item.UserId);
-        if (seller == null) return (false, "Seller not found.");
+        if (seller == null) return (false, "Müüjat ei leitud.");
 
         await using var tx = await _context.Database.BeginTransactionAsync();
         try
@@ -62,12 +62,12 @@ public class PurchaseService : IPurchaseService
                 _authService.NotifyBalanceChanged();
             }
 
-            return (true, "Purchase successful!");
+            return (true, "Ost õnnestus!");
         }
         catch
         {
             await tx.RollbackAsync();
-            return (false, "Purchase failed. Please try again.");
+            return (false, "Ost ebaõnnestus. Palun proovi uuesti.");
         }
     }
 }

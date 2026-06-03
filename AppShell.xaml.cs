@@ -67,14 +67,14 @@ public partial class AppShell : Shell
         Shell.SetNavBarIsVisible(this, true);
 
         var tabBar = new TabBar();
-        tabBar.Items.Add(MakeTab("Home",    "home.png",    "home",    () => _services.GetRequiredService<HomePage>()));
-        tabBar.Items.Add(MakeTab("Profile", "person.png",  "profile", () => _services.GetRequiredService<ProfilePage>()));
+        tabBar.Items.Add(MakeTab("Avaleht",    "home.png",    "home",    () => _services.GetRequiredService<HomePage>()));
+        tabBar.Items.Add(MakeTab("Profiil", "person.png",  "profile", () => _services.GetRequiredService<ProfilePage>()));
 
         if (_authService.IsAuthenticated)
         {
-            tabBar.Items.Add(MakeTab("My Items",     "bag.png",     "myitems",      () => _services.GetRequiredService<MyItemsPage>()));
-            tabBar.Items.Add(MakeTab("Transactions", "receipt.png", "transactions", () => _services.GetRequiredService<TransactionsPage>()));
-            tabBar.Items.Add(MakeTab("Balance",      "wallet.png",  "balance",      () => _services.GetRequiredService<BalancePage>()));
+            tabBar.Items.Add(MakeTab("Minu kuulutused",     "bag.png",     "myitems",      () => _services.GetRequiredService<MyItemsPage>()));
+            tabBar.Items.Add(MakeTab("Tehingud", "receipt.png", "transactions", () => _services.GetRequiredService<TransactionsPage>()));
+            tabBar.Items.Add(MakeTab("Saldo",      "wallet.png",  "balance",      () => _services.GetRequiredService<BalancePage>()));
         }
 
         Items.Add(tabBar);

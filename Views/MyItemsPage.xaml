@@ -4,7 +4,7 @@
              xmlns:dto="clr-namespace:ReStyle.Application.DTOs"
              xmlns:conv="clr-namespace:ReStyle.Converters"
              x:Class="ReStyle.Views.MyItemsPage"
-             Title="My Listings">
+             Title="Minu kuulutused">
 
     <ContentPage.Resources>
         <conv:ImagePathConverter x:Key="ImagePathConverter" />
@@ -21,7 +21,7 @@
             <Border.Shadow>
                 <Shadow Brush="{StaticResource TextPrimary}" Offset="0,2" Radius="8" Opacity="0.05" />
             </Border.Shadow>
-            <Button Text="＋  New Listing" Style="{StaticResource PrimaryButton}"
+            <Button Text="＋  Uus kuulutus" Style="{StaticResource PrimaryButton}"
                     HorizontalOptions="Fill"
                     Command="{Binding AddItemCommand}" />
         </Border>
@@ -37,7 +37,7 @@
                     <Border Grid.Column="0" x:Name="ActiveTabBg"
                             BackgroundColor="{StaticResource Primary}"
                             StrokeShape="RoundRectangle 10" Stroke="Transparent">
-                        <Button Text="Active" BackgroundColor="Transparent"
+                        <Button Text="Aktiivne" BackgroundColor="Transparent"
                                 TextColor="White" FontSize="14" FontAttributes="Bold"
                                 BorderWidth="0" HeightRequest="40"
                                 Clicked="OnActiveTab" />
@@ -45,7 +45,7 @@
                     <Border Grid.Column="1" x:Name="SoldTabBg"
                             BackgroundColor="Transparent"
                             StrokeShape="RoundRectangle 10" Stroke="Transparent">
-                        <Button Text="Sold" BackgroundColor="Transparent"
+                        <Button Text="Müüdud" BackgroundColor="Transparent"
                                 TextColor="{StaticResource TextSecondary}"
                                 FontSize="14" BorderWidth="0" HeightRequest="40"
                                 Clicked="OnSoldTab" />
@@ -60,9 +60,9 @@
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
                                      Spacing="12" Margin="0,80">
                     <Label Text="🛍️" FontSize="72" HorizontalOptions="Center" />
-                    <Label Text="No listings yet" Style="{StaticResource H2Label}"
+                    <Label Text="Kuulutusi pole veel" Style="{StaticResource H2Label}"
                            HorizontalOptions="Center" />
-                    <Label Text="Tap the button above to post your first item"
+                    <Label Text="Puuduta ülal olevat nuppu, et avaldada esimene kuulutus"
                            Style="{StaticResource SubtitleLabel}" HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
@@ -102,11 +102,11 @@
                                 </Border>
                             </VerticalStackLayout>
                             <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" Spacing="6">
-                                <Button Text="Edit" Style="{StaticResource SecondaryButton}"
+                                <Button Text="Muuda" Style="{StaticResource SecondaryButton}"
                                         HeightRequest="36" Padding="14,0" FontSize="13"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditItemCommand}"
                                         CommandParameter="{Binding .}" />
-                                <Button Text="Delete" Style="{StaticResource DangerButton}"
+                                <Button Text="Kustuta" Style="{StaticResource DangerButton}"
                                         HeightRequest="36" Padding="14,0" FontSize="13"
                                         IsVisible="{Binding Status, Converter={StaticResource IsNotSoldConverter}}"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteItemCommand}"
@@ -125,7 +125,7 @@
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
                                      Spacing="12" Margin="0,80">
                     <Label Text="💰" FontSize="72" HorizontalOptions="Center" />
-                    <Label Text="No sold items yet" Style="{StaticResource H2Label}"
+                    <Label Text="Müüdud esemeid veel pole" Style="{StaticResource H2Label}"
                            HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </CollectionView.EmptyView>

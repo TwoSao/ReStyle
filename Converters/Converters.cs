@@ -17,7 +17,7 @@ public class ItemStatusToColorConverter : IValueConverter
 public class ItemStatusToTextConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
-        value is ItemStatus status && status == ItemStatus.Sold ? "SOLD" : "AVAILABLE";
+        value is ItemStatus status && status == ItemStatus.Sold ? "MÜÜDUD" : "SAADAV";
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
         throw new NotImplementedException();
@@ -62,7 +62,7 @@ public class IsNotSoldConverter : IValueConverter
 public class BlockButtonTextConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
-        value is bool blocked && blocked ? "Unblock" : "Block";
+        value is bool blocked && blocked ? "Tühista blokeering" : "Blokeeri";
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
         throw new NotImplementedException();

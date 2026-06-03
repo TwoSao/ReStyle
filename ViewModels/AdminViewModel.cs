@@ -36,6 +36,6 @@ public partial class AdminViewModel : ObservableObject
             if (idx >= 0)
                 Users[idx] = user with { IsBlocked = !user.IsBlocked };
         }
-        else await Shell.Current.DisplayAlert("Error", message, "OK");
+        else await Shell.Current.DisplayAlert("Viga", message, "Sulge");
     }
 }

@@ -24,8 +24,8 @@ public partial class EditItemViewModel : ObservableObject
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private bool _isBusy;
 
-    public List<string> Categories { get; } = ["Tops", "Bottoms", "Dresses", "Outerwear", "Shoes", "Accessories", "Other"];
-    public List<string> Sizes { get; } = ["XS", "S", "M", "L", "XL", "XXL", "One Size"];
+    public List<string> Categories { get; } = ["T-särgid", "Alumine", "Kleidid", "Välisriided", "Kingad", "Aksessuaarid", "Muu"];
+    public List<string> Sizes { get; } = ["XS", "S", "M", "L", "XL", "XXL", "Üks suurus"];
 
     public EditItemViewModel(IItemService itemService, IAuthService authService, IImageService imageService)
     {
@@ -61,7 +61,7 @@ public partial class EditItemViewModel : ObservableObject
     private async Task SaveAsync()
     {
         ErrorMessage = string.Empty;
-        if (!decimal.TryParse(Price, out var price)) { ErrorMessage = "Invalid price."; return; }
+        if (!decimal.TryParse(Price, out var price)) { ErrorMessage = "Vigane hind."; return; }
 
         IsBusy = true;
         var (success, message) = await _itemService.UpdateItemAsync(

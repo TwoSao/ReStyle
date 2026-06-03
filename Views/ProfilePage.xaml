@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:conv="clr-namespace:ReStyle.Converters"
              x:Class="ReStyle.Views.ProfilePage"
-             Title="Profile">
+             Title="Profiil">
 
     <ContentPage.Resources>
         <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
@@ -23,9 +23,9 @@
                                 BackgroundColor="#FFFFFF15">
                             <Label Text="👤" FontSize="34" HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
-                        <Label Text="Guest" FontSize="22" FontAttributes="Bold" TextColor="White"
+                        <Label Text="Külaline" FontSize="22" FontAttributes="Bold" TextColor="White"
                                HorizontalOptions="Center" />
-                        <Label Text="Browsing without an account" FontSize="13"
+                        <Label Text="Sirvid kontota" FontSize="13"
                                TextColor="#A5B4FC" HorizontalOptions="Center" />
                     </VerticalStackLayout>
                 </Grid>
@@ -34,21 +34,21 @@
                     <Border BackgroundColor="{StaticResource PrimarySubtle}"
                             StrokeShape="RoundRectangle 16" Stroke="Transparent" Padding="20">
                         <VerticalStackLayout Spacing="10">
-                            <Label Text="Unlock the full experience" FontSize="16" FontAttributes="Bold"
+                            <Label Text="Ava täielik kogemus" FontSize="16" FontAttributes="Bold"
                                    TextColor="{StaticResource PrimaryDark}" />
-                            <Label Text="✦  Buy and sell fashion items" FontSize="14"
+                            <Label Text="✦  Osta ja müü moeesemeid" FontSize="14"
                                    TextColor="{StaticResource TextSecondary}" />
-                            <Label Text="✦  Track your transactions" FontSize="14"
+                            <Label Text="✦  Jälgi oma tehinguid" FontSize="14"
                                    TextColor="{StaticResource TextSecondary}" />
-                            <Label Text="✦  Manage your listings" FontSize="14"
+                            <Label Text="✦  Halda oma kuulutusi" FontSize="14"
                                    TextColor="{StaticResource TextSecondary}" />
-                            <Label Text="✦  Top up your balance" FontSize="14"
+                            <Label Text="✦  Täienda oma saldo" FontSize="14"
                                    TextColor="{StaticResource TextSecondary}" />
                         </VerticalStackLayout>
                     </Border>
-                    <Button Text="Sign In" Style="{StaticResource PrimaryButton}"
+                    <Button Text="Logi sisse" Style="{StaticResource PrimaryButton}"
                             Command="{Binding GoToLoginCommand}" />
-                    <Button Text="Create Account" Style="{StaticResource SecondaryButton}"
+                    <Button Text="Loo konto" Style="{StaticResource SecondaryButton}"
                             Command="{Binding GoToRegisterCommand}" />
                 </VerticalStackLayout>
 
@@ -86,14 +86,14 @@
                             <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="16" Opacity="0.12" />
                         </Border.Shadow>
                         <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
-                            <Label Grid.Row="0" Grid.Column="0" Text="BALANCE"
+                            <Label Text="JÄÄK" 
                                    Style="{StaticResource FieldLabel}" Margin="0" />
                             <Label Grid.Row="1" Grid.Column="0"
                                    Text="{Binding Balance, StringFormat='${0:F2}'}"
                                    FontSize="30" FontAttributes="Bold"
                                    TextColor="{StaticResource Primary}" />
                             <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
-                                    Text="Top Up" Style="{StaticResource PrimaryButton}"
+                                    Text="Täienda" Style="{StaticResource PrimaryButton}"
                                     HeightRequest="44" Padding="16,0"
                                     VerticalOptions="Center"
                                     Command="{Binding GoToBalanceCommand}" />
@@ -107,16 +107,16 @@
                             Stroke="{StaticResource Border}"
                             Padding="20">
                         <VerticalStackLayout Spacing="0">
-                            <Label Text="Edit Profile" Style="{StaticResource H2Label}" FontSize="17" />
-                            <Label Text="Update your personal info" Style="{StaticResource SubtitleLabel}"
+                            <Label Text="Muuda profiili" Style="{StaticResource H2Label}" FontSize="17" />
+                            <Label Text="Uuenda oma isiklikku infot" Style="{StaticResource SubtitleLabel}"
                                    Margin="0,2,0,16" />
 
-                            <Label Text="USERNAME" Style="{StaticResource FieldLabel}" />
-                            <Entry Placeholder="Username" Text="{Binding Username}"
+                            <Label Text="KASUTAJANIMI" Style="{StaticResource FieldLabel}" />
+                            <Entry Placeholder="Kasutajanimi" Text="{Binding Username}"
                                    Style="{StaticResource ModernEntry}" />
 
-                            <Label Text="EMAIL" Style="{StaticResource FieldLabel}" />
-                            <Entry Placeholder="Email" Text="{Binding Email}"
+                            <Label Text="E-POST" Style="{StaticResource FieldLabel}" />
+                            <Entry Placeholder="E-post" Text="{Binding Email}"
                                    Keyboard="Email" Style="{StaticResource ModernEntry}" />
 
                             <Border IsVisible="{Binding ErrorMessage, Converter={StaticResource NullToFalseConverter}}"
@@ -127,7 +127,7 @@
                                        TextColor="{StaticResource ErrorDark}" />
                             </Border>
 
-                            <Button Text="Save Changes" Style="{StaticResource PrimaryButton}"
+                            <Button Text="Salvesta" Style="{StaticResource PrimaryButton}"
                                     Command="{Binding SaveProfileCommand}"
                                     IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
                                     Margin="0,16,0,0" />
@@ -144,9 +144,9 @@
                             <Grid Padding="20,16" ColumnDefinitions="Auto,*,Auto">
                                 <Label Grid.Column="0" Text="📋" FontSize="18" VerticalOptions="Center" Margin="0,0,14,0" />
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                                    <Label Text="Transaction History" FontSize="15" FontAttributes="Bold"
+                                    <Label Text="Tehingute ajalugu" FontSize="15" FontAttributes="Bold"
                                            TextColor="{StaticResource TextPrimary}" />
-                                    <Label Text="View purchases and sales" FontSize="12"
+                                    <Label Text="Vaata oste ja müüke" FontSize="12"
                                            TextColor="{StaticResource TextTertiary}" />
                                 </VerticalStackLayout>
                                 <Label Grid.Column="2" Text="›" FontSize="20"
@@ -161,9 +161,9 @@
                                   IsVisible="{Binding IsAdmin}">
                                 <Label Grid.Column="0" Text="🛡️" FontSize="18" VerticalOptions="Center" Margin="0,0,14,0" />
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                                    <Label Text="Admin Panel" FontSize="15" FontAttributes="Bold"
+                                    <Label Text="Administraatori paneel" FontSize="15" FontAttributes="Bold"
                                            TextColor="{StaticResource TextPrimary}" />
-                                    <Label Text="Manage users and listings" FontSize="12"
+                                    <Label Text="Halda kasutajaid ja kuulutusi" FontSize="12"
                                            TextColor="{StaticResource TextTertiary}" />
                                 </VerticalStackLayout>
                                 <Label Grid.Column="2" Text="›" FontSize="20"
@@ -176,7 +176,7 @@
                     </Border>
 
                     <!-- Sign out -->
-                    <Button Text="Sign Out" Style="{StaticResource DangerButton}"
+                    <Button Text="Logi välja" Style="{StaticResource DangerButton}"
                             HorizontalOptions="Fill" HeightRequest="52"
                             CornerRadius="14" FontSize="15"
                             Margin="0,16,0,0"

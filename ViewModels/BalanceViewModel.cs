@@ -37,7 +37,7 @@ public partial class BalanceViewModel : ObservableObject
     [RelayCommand]
     private async Task TopUpAsync()
     {
-        if (!decimal.TryParse(Amount, out var amt)) { Message = "Invalid amount."; return; }
+        if (!decimal.TryParse(Amount, out var amt)) { Message = "Vigane summa."; return; }
 
         IsBusy = true;
         var (success, msg) = await _balanceService.TopUpAsync(

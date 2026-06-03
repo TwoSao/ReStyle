@@ -39,18 +39,18 @@ public class AuthService : IAuthService
     public async Task<(bool Success, string Message, User? User)> RegisterAsync(RegisterRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
-            return (false, "All fields are required.", null);
+            return (false, "Kõik väljad on kohustuslikud.", null);
 
         if (request.Password.Length < 6)
-            return (false, "Password must be at least 6 characters.", null);
+            return (false, "Parool peab olema vähemalt 6 tähemärki.", null);
 
         var repo = GetRepo();
 
         if (await repo.GetByEmailAsync(request.Email) != null)
-            return (false, "Email already in use.", null);
+            return (false, "E-post on juba kasutusel.", null);
 
         if (await repo.GetByUsernameAsync(request.Username) != null)
-            return (false, "Username already taken.", null);
+            return (false, "Kasutajanimi on juba võetud.", null);
 
         var user = new User
         {
@@ -65,7 +65,7 @@ public class AuthService : IAuthService
         CurrentUser = user;
         _isGuest = false;
         AuthStateChanged?.Invoke(this, EventArgs.Empty);
-        return (true, "Registration successful.", user);
+        return (true, "Registreerumine õnnestus.", user);
     }
 
     public async Task<(bool Success, string Message, User? User)> LoginAsync(LoginRequest request)
@@ -73,15 +73,15 @@ public class AuthService : IAuthService
         var repo = GetRepo();
         var user = await repo.GetByEmailAsync(request.Email);
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-            return (false, "Invalid email or password.", null);
+            return (false, "E-post või parool on vigane.", null);
 
         if (user.IsBlocked)
-            return (false, "Your account has been blocked.", null);
+            return (false, "Sinu konto on blokeeritud.", null);
 
         CurrentUser = user;
         _isGuest = false;
         AuthStateChanged?.Invoke(this, EventArgs.Empty);
-        return (true, "Login successful.", user);
+        return (true, "Sisselogimine õnnestus.", user);
     }
 
     public void Logout()

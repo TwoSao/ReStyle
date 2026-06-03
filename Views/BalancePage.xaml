@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:conv="clr-namespace:ReStyle.Converters"
              x:Class="ReStyle.Views.BalancePage"
-             Title="Balance">
+             Title="Saldo">
 
     <ContentPage.Resources>
         <conv:NullToFalseConverter x:Key="NullToFalseConverter" />
@@ -16,13 +16,13 @@
             <!-- Hero balance block -->
             <Grid BackgroundColor="{StaticResource HeaderBg}" Padding="24,48,24,40">
                 <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
-                    <Label Text="CURRENT BALANCE" FontSize="12" FontAttributes="Bold"
+                    <Label Text="PRAEGUNE SALDO" FontSize="12" FontAttributes="Bold"
                            TextColor="#A5B4FC" HorizontalOptions="Center"
                            CharacterSpacing="1.5" />
                     <Label Text="{Binding Balance, StringFormat='${0:F2}'}"
                            FontSize="52" FontAttributes="Bold" TextColor="White"
                            HorizontalOptions="Center" />
-                    <Label Text="Available to spend" FontSize="13" TextColor="#A5B4FC"
+                    <Label Text="Kuluvalmis saldo" FontSize="13" TextColor="#A5B4FC"
                            HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </Grid>
@@ -39,24 +39,24 @@
                         <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="20" Opacity="0.10" />
                     </Border.Shadow>
                     <VerticalStackLayout Spacing="0">
-                        <Label Text="Top Up Balance" FontSize="18" FontAttributes="Bold"
+                        <Label Text="Täienda saldot" FontSize="18" FontAttributes="Bold"
                                TextColor="{StaticResource TextPrimary}" />
-                        <Label Text="Add funds to your account" Style="{StaticResource SubtitleLabel}"
+                        <Label Text="Lisa oma kontole vahendeid" Style="{StaticResource SubtitleLabel}"
                                Margin="0,2,0,20" />
 
-                        <Label Text="CARD NUMBER" Style="{StaticResource FieldLabel}" />
+                        <Label Text="KAARDINUMBER" Style="{StaticResource FieldLabel}" />
                         <Entry Placeholder="1234 5678 9012 3456"
                                Text="{Binding CardNumber}"
                                Keyboard="Numeric"
                                Style="{StaticResource ModernEntry}"
                                MaxLength="19" />
 
-                        <Label Text="AMOUNT ($)" Style="{StaticResource FieldLabel}" />
+                        <Label Text="SUMMA ($)" Style="{StaticResource FieldLabel}" />
                         <Entry Placeholder="0.00" Text="{Binding Amount}"
                                Keyboard="Numeric" Style="{StaticResource ModernEntry}" />
 
                         <!-- Quick amounts -->
-                        <Label Text="QUICK SELECT" Style="{StaticResource FieldLabel}" />
+                        <Label Text="KIIRVALIK" Style="{StaticResource FieldLabel}" />
                         <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8" Margin="0,4,0,0">
                             <Button Grid.Column="0" Text="$10"
                                     BackgroundColor="{StaticResource PrimarySubtle}"
@@ -98,7 +98,7 @@
                                    HorizontalOptions="Center" />
                         </Border>
 
-                        <Button Text="Top Up Now" Style="{StaticResource PrimaryButton}"
+                        <Button Text="Täienda kohe" Style="{StaticResource PrimaryButton}"
                                 Command="{Binding TopUpCommand}"
                                 IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
                                 Margin="0,20,0,0" />
@@ -113,7 +113,7 @@
                         Stroke="Transparent" Padding="16,12">
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="ℹ️" FontSize="16" VerticalOptions="Center" />
-                        <Label Text="Funds are added instantly and available immediately for purchases."
+                        <Label Text="Raha lisatakse kohe ja on ostmiseks koheselt saadaval."
                                FontSize="13" TextColor="{StaticResource Info}"
                                VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
                     </HorizontalStackLayout>

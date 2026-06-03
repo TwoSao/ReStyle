@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:conv="clr-namespace:ReStyle.Converters"
              x:Class="ReStyle.Views.ItemDetailsPage"
-             Title="">
+             Title="Üksikasjad">
 
     <ContentPage.Resources>
         <conv:ImagePathConverter x:Key="ImagePathConverter" />
@@ -78,7 +78,7 @@
                                        HorizontalOptions="Center" VerticalOptions="Center" />
                             </Border>
                             <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                                <Label Text="SELLER" Style="{StaticResource CaptionLabel}"
+                                <Label Text="MÜÜJA" Style="{StaticResource CaptionLabel}"
                                        TextColor="{StaticResource TextTertiary}" />
                                 <Label Text="{Binding Item.SellerUsername}"
                                        FontSize="15" FontAttributes="Bold"
@@ -89,7 +89,7 @@
 
                     <!-- Description -->
                     <VerticalStackLayout Spacing="8">
-                        <Label Text="Description" Style="{StaticResource H2Label}" FontSize="17" />
+                        <Label Text="Kirjeldus" Style="{StaticResource H2Label}" FontSize="17" />
                         <Label Text="{Binding Item.Description}" Style="{StaticResource BodyLabel}"
                                TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
@@ -120,7 +120,7 @@
             </Border.Shadow>
             <Grid RowDefinitions="Auto">
                 <!-- Buy button (non-admin) -->
-                <Button Text="Buy Now"
+                <Button Text="Osta kohe"
                         Style="{StaticResource PrimaryButton}"
                         Command="{Binding BuyCommand}"
                         IsVisible="{Binding CanBuy}"
@@ -132,12 +132,12 @@
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10"
                       IsVisible="{Binding IsAdmin}">
                     <Button Grid.Column="0"
-                            Text="Edit"
+                            Text="Muuda"
                             Style="{StaticResource SecondaryButton}"
                             Command="{Binding EditCommand}"
                             HorizontalOptions="Fill" />
                     <Button Grid.Column="1"
-                            Text="Delete"
+                            Text="Kustuta"
                             Style="{StaticResource DangerButton}"
                             Command="{Binding DeleteCommand}"
                             WidthRequest="90" />
@@ -148,7 +148,7 @@
                         Stroke="{StaticResource Border}"
                         Padding="16,14"
                         IsVisible="{Binding ShowNotAvailable}">
-                    <Label Text="Not available for purchase"
+                    <Label Text="Ei ole ostmiseks saadaval"
                            FontSize="14" TextColor="{StaticResource TextTertiary}"
                            HorizontalOptions="Center" />
                 </Border>

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dto="clr-namespace:ReStyle.Application.DTOs"
              x:Class="ReStyle.Views.TransactionsPage"
-             Title="Transactions">
+             Title="Tehingud">
 
     <Grid RowDefinitions="Auto,*">
 
@@ -21,7 +21,7 @@
                     <Border Grid.Column="0" x:Name="PurchasesTabBg"
                             BackgroundColor="{StaticResource Primary}"
                             StrokeShape="RoundRectangle 10" Stroke="Transparent">
-                        <Button x:Name="PurchasesBtn" Text="Purchases"
+                        <Button x:Name="PurchasesBtn" Text="Ostud"
                                 BackgroundColor="Transparent"
                                 TextColor="White"
                                 FontSize="14" FontAttributes="Bold"
@@ -31,7 +31,7 @@
                     <Border Grid.Column="1" x:Name="SalesTabBg"
                             BackgroundColor="Transparent"
                             StrokeShape="RoundRectangle 10" Stroke="Transparent">
-                        <Button x:Name="SalesBtn" Text="Sales"
+                        <Button x:Name="SalesBtn" Text="Müük"
                                 BackgroundColor="Transparent"
                                 TextColor="{StaticResource TextSecondary}"
                                 FontSize="14"
@@ -48,9 +48,9 @@
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
                                      Spacing="12" Margin="0,80">
                     <Label Text="📋" FontSize="72" HorizontalOptions="Center" />
-                    <Label Text="No transactions yet" Style="{StaticResource H2Label}"
+                    <Label Text="Tehinguid pole veel" Style="{StaticResource H2Label}"
                            HorizontalOptions="Center" />
-                    <Label Text="Your purchases and sales will appear here"
+                    <Label Text="Sinu ostud ja müügid ilmuvad siia"
                            Style="{StaticResource SubtitleLabel}" HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
@@ -83,7 +83,7 @@
                                        LineBreakMode="TailTruncation" MaxLines="1" />
                                 <Label Text="{Binding TransactionDate, StringFormat='{0:MMM dd, yyyy}'}"
                                        FontSize="12" TextColor="{StaticResource TextTertiary}" />
-                                <Label Text="{Binding BuyerUsername, StringFormat='Buyer: {0}'}"
+                                <Label Text="{Binding BuyerUsername, StringFormat='Ostja: {0}'}"
                                        FontSize="12" TextColor="{StaticResource TextTertiary}" />
                             </VerticalStackLayout>
                             <!-- Amount -->

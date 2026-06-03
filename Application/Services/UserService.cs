@@ -34,43 +34,43 @@ public class UserService : IUserService
     public async Task<(bool Success, string Message)> UpdateProfileAsync(int userId, UpdateProfileRequest request)
     {
         var user = await _userRepo.GetByIdAsync(userId);
-        if (user == null) return (false, "User not found.");
+        if (user == null) return (false, "Kasutajat ei leitud.");
 
         var existing = await _userRepo.GetByUsernameAsync(request.Username);
         if (existing != null && existing.UserId != userId)
-            return (false, "Username already taken.");
+            return (false, "Kasutajanimi on juba võetud.");
 
         user.Username = request.Username.Trim();
         user.Email = request.Email.Trim().ToLower();
         await _userRepo.UpdateAsync(user);
         await _userRepo.SaveChangesAsync();
-        return (true, "Profile updated.");
+        return (true, "Profiil uuendatud.");
     }
 
     public async Task<(bool Success, string Message)> BlockUserAsync(int userId)
     {
         var user = await _userRepo.GetByIdAsync(userId);
-        if (user == null) return (false, "User not found.");
+        if (user == null) return (false, "Kasutajat ei leitud.");
         user.IsBlocked = true;
         await _userRepo.UpdateAsync(user);
         await _userRepo.SaveChangesAsync();
-        return (true, "User blocked.");
+        return (true, "Kasutaja blokeeritud.");
     }
 
     public async Task<(bool Success, string Message)> UnblockUserAsync(int userId)
     {
         var user = await _userRepo.GetByIdAsync(userId);
-        if (user == null) return (false, "User not found.");
+        if (user == null) return (false, "Kasutajat ei leitud.");
         user.IsBlocked = false;
         await _userRepo.UpdateAsync(user);
         await _userRepo.SaveChangesAsync();
-        return (true, "User unblocked.");
+        return (true, "Kasutaja blokeering eemaldatud.");
     }
 
     public async Task<(bool Success, string Message)> DeleteUserAsync(int userId)
     {
         var user = await _context.Users.FindAsync(userId);
-        if (user == null) return (false, "User not found.");
+        if (user == null) return (false, "Kasutajat ei leitud.");
 
         // All operations on the same DbContext so one SaveChangesAsync covers everything
         // Order: transactions first (FK Restrict on ItemId, BuyerId, SellerId), then items, then user
@@ -85,6 +85,6 @@ public class UserService : IUserService
 
         _context.Users.Remove(user);
         await _context.SaveChangesAsync();
-        return (true, "User deleted.");
+        return (true, "Kasutaja kustutatud.");
     }
 }

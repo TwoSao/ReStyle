@@ -14,12 +14,12 @@ public class BalanceService : IBalanceService
 
     public async Task<(bool Success, string Message)> TopUpAsync(int userId, TopUpRequest request)
     {
-        if (request.Amount <= 0) return (false, "Amount must be greater than 0.");
+        if (request.Amount <= 0) return (false, "Summa peab olema suurem kui 0.");
         if (string.IsNullOrWhiteSpace(request.CardNumber) || request.CardNumber.Length < 16)
-            return (false, "Invalid card number.");
+            return (false, "Vale kaardinumbr." );
 
         var user = await _context.Users.FindAsync(userId);
-        if (user == null) return (false, "User not found.");
+        if (user == null) return (false, "Kasutajat ei leitud.");
 
         user.Balance += request.Amount;
 
@@ -31,7 +31,7 @@ public class BalanceService : IBalanceService
         });
 
         await _context.SaveChangesAsync();
-        return (true, $"Balance topped up by {request.Amount:C}.");
+        return (true, $"Saldo täiendati summaga {request.Amount:C}.");
     }
 
     public async Task<IEnumerable<BalanceTopUpDto>> GetTopUpHistoryAsync(int userId) =>

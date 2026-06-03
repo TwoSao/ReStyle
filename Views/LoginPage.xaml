@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:conv="clr-namespace:ReStyle.Converters"
              x:Class="ReStyle.Views.LoginPage"
-             Title=""
+             Title="Logi sisse"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
@@ -28,7 +28,7 @@
                     </Border>
                     <Label Text="ReStyle" FontSize="34" FontAttributes="Bold"
                            TextColor="White" HorizontalOptions="Center" />
-                    <Label Text="Premium Fashion Marketplace" FontSize="14"
+                    <Label Text="Premiumi moepood" FontSize="14"
                            TextColor="#A5B4FC" HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </Grid>
@@ -46,15 +46,15 @@
                         <Shadow Brush="{StaticResource TextPrimary}" Offset="0,4" Radius="20" Opacity="0.08" />
                     </Border.Shadow>
                     <VerticalStackLayout Spacing="0">
-                        <Label Text="Welcome back" Style="{StaticResource H2Label}" />
-                        <Label Text="Sign in to your account" Style="{StaticResource SubtitleLabel}"
+                        <Label Text="Tere tagasi" Style="{StaticResource H2Label}" />
+                        <Label Text="Logi sisse oma kontole" Style="{StaticResource SubtitleLabel}"
                                Margin="0,4,0,20" />
 
-                        <Label Text="EMAIL" Style="{StaticResource FieldLabel}" />
-                        <Entry Placeholder="you@example.com" Text="{Binding Email}"
+                        <Label Text="E-POST" Style="{StaticResource FieldLabel}" />
+                        <Entry Placeholder="sinu@email.ee" Text="{Binding Email}"
                                Keyboard="Email" Style="{StaticResource ModernEntry}" />
 
-                        <Label Text="PASSWORD" Style="{StaticResource FieldLabel}" />
+                        <Label Text="PAROOL" Style="{StaticResource FieldLabel}" />
                         <Entry Placeholder="••••••••" Text="{Binding Password}"
                                IsPassword="True" Style="{StaticResource ModernEntry}" />
 
@@ -68,7 +68,7 @@
                                    TextColor="{StaticResource ErrorDark}" />
                         </Border>
 
-                        <Button Text="Sign In" Style="{StaticResource PrimaryButton}"
+                        <Button Text="Logi sisse" Style="{StaticResource PrimaryButton}"
                                 Command="{Binding LoginCommand}"
                                 IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
                                 Margin="0,20,0,0" />
@@ -80,9 +80,9 @@
 
                 <!-- Register -->
                 <HorizontalStackLayout HorizontalOptions="Center" Margin="0,20,0,0" Spacing="4">
-                    <Label Text="New to ReStyle?" Style="{StaticResource SubtitleLabel}"
+                    <Label Text="Uus ReStyle'is?" Style="{StaticResource SubtitleLabel}"
                            VerticalOptions="Center" />
-                    <Button Text="Create account" Style="{StaticResource GhostButton}"
+                    <Button Text="Loo konto" Style="{StaticResource GhostButton}"
                             Command="{Binding GoToRegisterCommand}"
                             FontAttributes="Bold" />
                 </HorizontalStackLayout>
@@ -91,13 +91,13 @@
                 <HorizontalStackLayout Margin="0,8" Spacing="12" HorizontalOptions="Fill">
                     <BoxView Style="{StaticResource HDivider}" HorizontalOptions="FillAndExpand"
                              VerticalOptions="Center" Margin="0" />
-                    <Label Text="or" Style="{StaticResource CaptionLabel}" VerticalOptions="Center" />
+                    <Label Text="või" Style="{StaticResource CaptionLabel}" VerticalOptions="Center" />
                     <BoxView Style="{StaticResource HDivider}" HorizontalOptions="FillAndExpand"
                              VerticalOptions="Center" Margin="0" />
                 </HorizontalStackLayout>
 
                 <!-- Guest -->
-                <Button Text="Browse as Guest" Style="{StaticResource SecondaryButton}"
+                <Button Text="Sirvi külalisena" Style="{StaticResource SecondaryButton}"
                         Command="{Binding ContinueAsGuestCommand}" />
 
             </VerticalStackLayout>

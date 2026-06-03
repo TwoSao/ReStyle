@@ -47,7 +47,7 @@ public partial class MyItemsViewModel : ObservableObject, IRecipient<ItemsChange
     [RelayCommand]
     private async Task DeleteItemAsync(ItemDto item)
     {
-        var confirm = await Shell.Current.DisplayAlert("Delete", $"Delete '{item.Title}'?", "Yes", "No");
+        var confirm = await Shell.Current.DisplayAlert("Kustuta", $"Kustuta '{item.Title}'?", "Jah", "Ei");
         if (!confirm) return;
 
         using var scope = _services.CreateScope();
@@ -58,7 +58,7 @@ public partial class MyItemsViewModel : ObservableObject, IRecipient<ItemsChange
             Items.Remove(item);
             WeakReferenceMessenger.Default.Send(new ItemsChangedMessage());
         }
-        else await Shell.Current.DisplayAlert("Error", message, "OK");
+        else await Shell.Current.DisplayAlert("Viga", message, "Sulge");
     }
 
     [RelayCommand]

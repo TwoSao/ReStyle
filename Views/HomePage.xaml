@@ -34,7 +34,7 @@
                                VerticalOptions="Center" Margin="0,0,8,0"
                                TextColor="{StaticResource TextTertiary}" />
                         <Entry Grid.Column="1"
-                               Placeholder="Search fashion..."
+                               Placeholder="Otsi moeartikleid..."
                                Text="{Binding SearchQuery}"
                                ReturnCommand="{Binding SearchCommand}"
                                BackgroundColor="Transparent"
@@ -42,7 +42,7 @@
                                TextColor="{StaticResource TextPrimary}"
                                FontSize="14"
                                VerticalOptions="Center" />
-                        <Button Grid.Column="2" Text="Go" FontSize="12"
+                        <Button Grid.Column="2" Text="Otsi" FontSize="12"
                                 BackgroundColor="{StaticResource Primary}"
                                 TextColor="White" CornerRadius="8"
                                 HeightRequest="32" Padding="10,0"
@@ -80,11 +80,11 @@
                     <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
                                          Spacing="12" Margin="0,80">
                         <Label Text="👗" FontSize="72" HorizontalOptions="Center" />
-                        <Label Text="Nothing here yet" Style="{StaticResource H2Label}"
+                        <Label Text="Siin pole veel midagi" Style="{StaticResource H2Label}"
                                HorizontalOptions="Center" />
-                        <Label Text="Be the first to list something!" Style="{StaticResource SubtitleLabel}"
+                        <Label Text="Ole esimene, kes lisab midagi!" Style="{StaticResource SubtitleLabel}"
                                HorizontalOptions="Center" />
-                        <Button Text="Post a Listing" Style="{StaticResource PrimaryButton}"
+                        <Button Text="Lisa kuulutus" Style="{StaticResource PrimaryButton}"
                                 HorizontalOptions="Center"
                                 Command="{Binding GoToAddItemCommand}" />
                     </VerticalStackLayout>

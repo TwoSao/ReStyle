@@ -23,7 +23,7 @@ public partial class LoginViewModel : ObservableObject
         ErrorMessage = string.Empty;
         if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
-            ErrorMessage = "Please fill in all fields.";
+            ErrorMessage = "Palun täida kõik väljad.";
             return;
         }
 

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:conv="clr-namespace:ReStyle.Converters"
              x:Class="ReStyle.Views.EditItemPage"
-             Title="Edit Listing">
+             Title="Muuda kuulutust">
 
     <ContentPage.Resources>
         <conv:ImagePathConverter x:Key="ImagePathConverter" />
@@ -30,7 +30,7 @@
                             <Label Text="📷" FontSize="28"
                                    HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
-                        <Label Text="Tap to change photo" FontSize="14" FontAttributes="Bold"
+                        <Label Text="Puuduta foto muutmiseks" FontSize="14" FontAttributes="Bold"
                                TextColor="{StaticResource Primary}" HorizontalOptions="Center" />
                     </VerticalStackLayout>
                     <Grid.GestureRecognizers>
@@ -44,13 +44,13 @@
                     StrokeShape="RoundRectangle 16" Stroke="{StaticResource Border}"
                     Padding="20" Margin="0,0,0,16">
                 <VerticalStackLayout Spacing="0">
-                    <Label Text="Listing Details" Style="{StaticResource H2Label}" FontSize="17"
+                    <Label Text="Kuulutuse andmed" Style="{StaticResource H2Label}" FontSize="17"
                            Margin="0,0,0,16" />
 
-                    <Label Text="TITLE" Style="{StaticResource FieldLabel}" />
+                    <Label Text="PEALKIRI" Style="{StaticResource FieldLabel}" />
                     <Entry Text="{Binding Title}" Style="{StaticResource ModernEntry}" />
 
-                    <Label Text="DESCRIPTION" Style="{StaticResource FieldLabel}" />
+                    <Label Text="KIRJELDUS" Style="{StaticResource FieldLabel}" />
                     <Border BackgroundColor="{StaticResource SurfaceVariant}"
                             StrokeShape="RoundRectangle 10" Stroke="Transparent"
                             Padding="14,10" Margin="0,2,0,0">
@@ -60,7 +60,7 @@
                                 BackgroundColor="Transparent" />
                     </Border>
 
-                    <Label Text="PRICE ($)" Style="{StaticResource FieldLabel}" />
+                    <Label Text="HIND ($)" Style="{StaticResource FieldLabel}" />
                     <Entry Text="{Binding Price}" Keyboard="Numeric"
                            Style="{StaticResource ModernEntry}" />
                 </VerticalStackLayout>
@@ -71,10 +71,10 @@
                     StrokeShape="RoundRectangle 16" Stroke="{StaticResource Border}"
                     Padding="20" Margin="0,0,0,16">
                 <VerticalStackLayout Spacing="0">
-                    <Label Text="Classification" Style="{StaticResource H2Label}" FontSize="17"
+                    <Label Text="Klassifikatsioon" Style="{StaticResource H2Label}" FontSize="17"
                            Margin="0,0,0,16" />
 
-                    <Label Text="CATEGORY" Style="{StaticResource FieldLabel}" />
+                    <Label Text="KATEGOORIA" Style="{StaticResource FieldLabel}" />
                     <Border BackgroundColor="{StaticResource SurfaceVariant}"
                             StrokeShape="RoundRectangle 10" Stroke="Transparent"
                             Padding="12,0" Margin="0,2,0,0" HeightRequest="52">
@@ -82,7 +82,7 @@
                                 Style="{StaticResource ModernPicker}" BackgroundColor="Transparent" />
                     </Border>
 
-                    <Label Text="SIZE" Style="{StaticResource FieldLabel}" />
+                    <Label Text="SUURUS" Style="{StaticResource FieldLabel}" />
                     <Border BackgroundColor="{StaticResource SurfaceVariant}"
                             StrokeShape="RoundRectangle 10" Stroke="Transparent"
                             Padding="12,0" Margin="0,2,0,0" HeightRequest="52">
@@ -101,11 +101,11 @@
                        TextColor="{StaticResource ErrorDark}" />
             </Border>
 
-            <Button Text="Save Changes" Style="{StaticResource PrimaryButton}"
+            <Button Text="Salvesta" Style="{StaticResource PrimaryButton}"
                     Command="{Binding SaveCommand}"
                     IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
                     Margin="0,0,0,10" />
-            <Button Text="Cancel" Style="{StaticResource SecondaryButton}"
+            <Button Text="Tühista" Style="{StaticResource SecondaryButton}"
                     Command="{Binding CancelCommand}" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 

@@ -36,9 +36,9 @@ public class ItemService : IItemService
     public async Task<(bool Success, string Message, ItemDto? Item)> CreateItemAsync(int userId, CreateItemRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Title))
-            return (false, "Title is required.", null);
+            return (false, "Pealkiri on kohustuslik.", null);
         if (request.Price <= 0)
-            return (false, "Price must be greater than 0.", null);
+            return (false, "Hind peab olema suurem kui 0.", null);
 
         var item = new Item
         {
@@ -53,14 +53,14 @@ public class ItemService : IItemService
 
         await _itemRepo.AddAsync(item);
         await _itemRepo.SaveChangesAsync();
-        return (true, "Item created.", new ItemDto(item.ItemId, item.Title, item.Description, item.Price, item.ImagePath, item.Status, item.Category, item.Size, item.CreatedAt, item.UserId, string.Empty));
+        return (true, "Artikkel loodud.", new ItemDto(item.ItemId, item.Title, item.Description, item.Price, item.ImagePath, item.Status, item.Category, item.Size, item.CreatedAt, item.UserId, string.Empty));
     }
 
     public async Task<(bool Success, string Message)> UpdateItemAsync(int itemId, int userId, UpdateItemRequest request, bool isAdmin = false)
     {
         var item = await _itemRepo.GetByIdAsync(itemId);
-        if (item == null) return (false, "Item not found.");
-        if (!isAdmin && item.UserId != userId) return (false, "Unauthorized.");
+        if (item == null) return (false, "Artiklit ei leitud.");
+        if (!isAdmin && item.UserId != userId) return (false, "Pole õigusi.");
 
         item.Title = request.Title.Trim();
         item.Description = request.Description.Trim();
@@ -71,17 +71,17 @@ public class ItemService : IItemService
 
         await _itemRepo.UpdateAsync(item);
         await _itemRepo.SaveChangesAsync();
-        return (true, "Item updated.");
+        return (true, "Artikkel uuendatud.");
     }
 
     public async Task<(bool Success, string Message)> DeleteItemAsync(int itemId, int userId, bool isAdmin = false)
     {
         var item = await _itemRepo.GetByIdAsync(itemId);
-        if (item == null) return (false, "Item not found.");
-        if (!isAdmin && item.UserId != userId) return (false, "Unauthorized.");
+        if (item == null) return (false, "Artiklit ei leitud.");
+        if (!isAdmin && item.UserId != userId) return (false, "Pole õigusi.");
 
         await _itemRepo.DeleteAsync(item);
         await _itemRepo.SaveChangesAsync();
-        return (true, "Item deleted.");
+        return (true, "Artikkel kustutatud.");
     }
 }

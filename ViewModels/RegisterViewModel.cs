@@ -23,7 +23,7 @@ public partial class RegisterViewModel : ObservableObject
     private async Task RegisterAsync()
     {
         ErrorMessage = string.Empty;
-        if (Password != ConfirmPassword) { ErrorMessage = "Passwords do not match."; return; }
+        if (Password != ConfirmPassword) { ErrorMessage = "Paroolid ei ühti."; return; }
 
         IsBusy = true;
         var (success, message, _) = await _authService.RegisterAsync(new RegisterRequest(Username, Email, Password));

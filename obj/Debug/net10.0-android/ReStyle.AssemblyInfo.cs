@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ReStyle")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+1a5e86c8acc851fe91f6613a610046ba0a9107aa")]
 [assembly: System.Reflection.AssemblyProductAttribute("ReStyle")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ReStyle")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

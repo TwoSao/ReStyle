@@ -24,6 +24,10 @@
 		<data>
 		MVjgwyqU2TZLxCXQCqfqaNmQ1fA=
 		</data>
+		<key>MauiInfo.plist</key>
+		<data>
+		iEtuUGCV6JM3gxS/pO33swhmpp8=
+		</data>
 		<key>MauiSplash.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
 		Tudi3z6wi3uQrMRWyF14mN4lz98=
@@ -186,11 +190,11 @@
 		</data>
 		<key>ReStyle.dll</key>
 		<data>
-		JQBn69TCWad3dYheo3xQn8Oy/Kw=
+		Kje7I4z0AJJWcwqds0AiSS+hV6k=
 		</data>
 		<key>ReStyle.pdb</key>
 		<data>
-		gN+6eok98SQitKllAYXw3v9lA4M=
+		WCPImu1NCyljWcp4yGrDqGGSGEQ=
 		</data>
 		<key>SQLitePCLRaw.batteries_v2.dll</key>
 		<data>
@@ -1135,6 +1139,13 @@
 			fX61wGbP6IO0ObEgC/Xcs4ex5TGd0u29qp4jrf5BZFI=
 			</data>
 		</dict>
+		<key>MauiInfo.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			tx0KXqEC+DvcCGyogQTEQWHcCWJYYqH24NtPwhpQEjo=
+			</data>
+		</dict>
 		<key>MauiSplash.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<dict>
 			<key>hash2</key>
@@ -1412,14 +1423,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			mcglJI0eFVJSJUdHXQMr3/nGg6QeTxvQLvC2jfpH21U=
+			CcOuTihdU7L7LH0STqhdX7cahUp4VpEQYo7pEIxiLC4=
 			</data>
 		</dict>
 		<key>ReStyle.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			wlzv0cE2+EhQEoRua3G8CYQVrrdul7twGRsrgbfBQs4=
+			UrrOwteYOpuLJNdbp2KlqZPmJdeysj28cERnz9fTZGk=
 			</data>
 		</dict>
 		<key>SQLitePCLRaw.batteries_v2.dll</key>
