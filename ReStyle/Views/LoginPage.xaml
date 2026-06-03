@@ -1,61 +1,107 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:ReStyle.ViewModels"
+             xmlns:conv="clr-namespace:ReStyle.Converters"
              x:Class="ReStyle.Views.LoginPage"
              Title=""
              Shell.NavBarIsVisible="False">
 
+    <ContentPage.Resources>
+        <conv:NullToFalseConverter x:Key="NullToFalseConverter" />
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </ContentPage.Resources>
+
     <ScrollView>
-        <VerticalStackLayout Padding="32,60,32,32" Spacing="0">
+        <Grid RowDefinitions="260,*">
 
-            <!-- Logo / Brand -->
-            <Label Text="ReStyle" FontSize="42" FontAttributes="Bold"
-                   TextColor="{StaticResource Primary}" HorizontalOptions="Center" />
-            <Label Text="Buy &amp; Sell Fashion" Style="{StaticResource SubtitleLabel}"
-                   HorizontalOptions="Center" Margin="0,4,0,48" />
-
-            <!-- Form Card -->
-            <Frame Style="{StaticResource CardFrame}" Padding="24">
-                <VerticalStackLayout Spacing="12">
-                    <Label Text="Welcome back" Style="{StaticResource TitleLabel}" />
-                    <Label Text="Sign in to your account" Style="{StaticResource SubtitleLabel}" Margin="0,0,0,8" />
-
-                    <Entry Placeholder="Email" Text="{Binding Email}"
-                           Keyboard="Email" Style="{StaticResource ModernEntry}" />
-
-                    <Entry Placeholder="Password" Text="{Binding Password}"
-                           IsPassword="True" Style="{StaticResource ModernEntry}" />
-
-                    <Label Text="{Binding ErrorMessage}" TextColor="{StaticResource Error}"
-                           IsVisible="{Binding ErrorMessage, Converter={StaticResource NullToFalseConverter}}"
-                           FontSize="13" Margin="0,4" />
-
-                    <Button Text="Sign In" Style="{StaticResource PrimaryButton}"
-                            Command="{Binding LoginCommand}"
-                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
-                            Margin="0,8,0,0" />
-
-                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
-                                       Color="{StaticResource Primary}" HorizontalOptions="Center" />
+            <!-- ── Hero Header ── -->
+            <Grid Grid.Row="0" BackgroundColor="{StaticResource HeaderBg}">
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
+                    <!-- Logo mark -->
+                    <Border StrokeShape="RoundRectangle 24"
+                            BackgroundColor="#FFFFFF18"
+                            Stroke="Transparent"
+                            WidthRequest="72" HeightRequest="72"
+                            HorizontalOptions="Center">
+                        <Label Text="✦" FontSize="32" TextColor="White"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <Label Text="ReStyle" FontSize="34" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center" />
+                    <Label Text="Premium Fashion Marketplace" FontSize="14"
+                           TextColor="#A5B4FC" HorizontalOptions="Center" />
                 </VerticalStackLayout>
-            </Frame>
+            </Grid>
 
-            <!-- Register link -->
-            <HorizontalStackLayout HorizontalOptions="Center" Margin="0,24,0,0" Spacing="4">
-                <Label Text="Don't have an account?" Style="{StaticResource SubtitleLabel}" VerticalOptions="Center" />
-                <Button Text="Register" Style="{StaticResource SecondaryButton}"
-                        Command="{Binding GoToRegisterCommand}"
-                        HeightRequest="36" Padding="12,0" BorderWidth="0"
-                        TextColor="{StaticResource Primary}" BackgroundColor="Transparent" />
-            </HorizontalStackLayout>
+            <!-- ── Form ── -->
+            <VerticalStackLayout Grid.Row="1" Padding="24,0,24,32" Spacing="0">
 
-            <!-- Guest mode -->
-            <Button Text="Browse as Guest" Style="{StaticResource SecondaryButton}"
-                    Margin="0,8,0,0"
-                    Command="{Binding ContinueAsGuestCommand}" />
+                <!-- Card pulled up -->
+                <Border Margin="0,-28,0,0"
+                        BackgroundColor="{StaticResource Surface}"
+                        StrokeShape="RoundRectangle 20"
+                        Stroke="{StaticResource Border}"
+                        Padding="24">
+                    <Border.Shadow>
+                        <Shadow Brush="{StaticResource TextPrimary}" Offset="0,4" Radius="20" Opacity="0.08" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="0">
+                        <Label Text="Welcome back" Style="{StaticResource H2Label}" />
+                        <Label Text="Sign in to your account" Style="{StaticResource SubtitleLabel}"
+                               Margin="0,4,0,20" />
 
-        </VerticalStackLayout>
+                        <Label Text="EMAIL" Style="{StaticResource FieldLabel}" />
+                        <Entry Placeholder="you@example.com" Text="{Binding Email}"
+                               Keyboard="Email" Style="{StaticResource ModernEntry}" />
+
+                        <Label Text="PASSWORD" Style="{StaticResource FieldLabel}" />
+                        <Entry Placeholder="••••••••" Text="{Binding Password}"
+                               IsPassword="True" Style="{StaticResource ModernEntry}" />
+
+                        <!-- Error -->
+                        <Border IsVisible="{Binding ErrorMessage, Converter={StaticResource NullToFalseConverter}}"
+                                BackgroundColor="{StaticResource ErrorSubtle}"
+                                StrokeShape="RoundRectangle 10"
+                                Stroke="Transparent"
+                                Padding="12,10" Margin="0,12,0,0">
+                            <Label Text="{Binding ErrorMessage}" FontSize="13"
+                                   TextColor="{StaticResource ErrorDark}" />
+                        </Border>
+
+                        <Button Text="Sign In" Style="{StaticResource PrimaryButton}"
+                                Command="{Binding LoginCommand}"
+                                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                                Margin="0,20,0,0" />
+
+                        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                           IsVisible="{Binding IsBusy}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Register -->
+                <HorizontalStackLayout HorizontalOptions="Center" Margin="0,20,0,0" Spacing="4">
+                    <Label Text="New to ReStyle?" Style="{StaticResource SubtitleLabel}"
+                           VerticalOptions="Center" />
+                    <Button Text="Create account" Style="{StaticResource GhostButton}"
+                            Command="{Binding GoToRegisterCommand}"
+                            FontAttributes="Bold" />
+                </HorizontalStackLayout>
+
+                <!-- Divider -->
+                <HorizontalStackLayout Margin="0,8" Spacing="12" HorizontalOptions="Fill">
+                    <BoxView Style="{StaticResource HDivider}" HorizontalOptions="FillAndExpand"
+                             VerticalOptions="Center" Margin="0" />
+                    <Label Text="or" Style="{StaticResource CaptionLabel}" VerticalOptions="Center" />
+                    <BoxView Style="{StaticResource HDivider}" HorizontalOptions="FillAndExpand"
+                             VerticalOptions="Center" Margin="0" />
+                </HorizontalStackLayout>
+
+                <!-- Guest -->
+                <Button Text="Browse as Guest" Style="{StaticResource SecondaryButton}"
+                        Command="{Binding ContinueAsGuestCommand}" />
+
+            </VerticalStackLayout>
+        </Grid>
     </ScrollView>
 
 </ContentPage>

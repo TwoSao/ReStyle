@@ -9,7 +9,6 @@ using ReStyle.ViewModels;
 using ReStyle.Views;
 
 namespace ReStyle;
-
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()

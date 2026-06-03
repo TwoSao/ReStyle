@@ -7,62 +7,115 @@
 
     <ContentPage.Resources>
         <conv:ImagePathConverter x:Key="ImagePathConverter" />
+        <conv:NullToFalseConverter x:Key="NullToFalseConverter" />
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
     </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="16">
+        <VerticalStackLayout Padding="20,16,20,40" Spacing="0">
 
-            <!-- Image Picker -->
-            <Frame Style="{StaticResource CardFrame}" HeightRequest="200" Padding="0">
+            <!-- Photo picker -->
+            <Border StrokeShape="RoundRectangle 16" Stroke="{StaticResource Border}"
+                    HeightRequest="200" BackgroundColor="{StaticResource SurfaceVariant}"
+                    Margin="0,0,0,20">
                 <Grid>
                     <Image Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}"
-                           Aspect="AspectFill" IsVisible="{Binding ImagePath, Converter={StaticResource NullToFalseConverter}}" />
-                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8"
+                           Aspect="AspectFill"
+                           IsVisible="{Binding ImagePath, Converter={StaticResource NullToFalseConverter}}" />
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10"
                                          IsVisible="{Binding ImagePath, Converter={StaticResource InverseBoolConverter}}">
-                        <Label Text="📷" FontSize="48" HorizontalOptions="Center" />
-                        <Label Text="Tap to add photo" Style="{StaticResource SubtitleLabel}" />
+                        <Border BackgroundColor="{StaticResource PrimarySubtle}"
+                                StrokeShape="RoundRectangle 24" Stroke="Transparent"
+                                WidthRequest="60" HeightRequest="60" HorizontalOptions="Center">
+                            <Label Text="📷" FontSize="28"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Tap to add photo" FontSize="14" FontAttributes="Bold"
+                               TextColor="{StaticResource Primary}" HorizontalOptions="Center" />
+                        <Label Text="JPG, PNG supported" Style="{StaticResource CaptionLabel}"
+                               HorizontalOptions="Center" />
                     </VerticalStackLayout>
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding PickImageCommand}" />
                     </Grid.GestureRecognizers>
                 </Grid>
-            </Frame>
+            </Border>
 
-            <Label Text="Title" Style="{StaticResource SubtitleLabel}" />
-            <Entry Placeholder="e.g. Vintage Denim Jacket" Text="{Binding Title}" Style="{StaticResource ModernEntry}" />
+            <!-- Form -->
+            <Border BackgroundColor="{StaticResource Surface}"
+                    StrokeShape="RoundRectangle 16" Stroke="{StaticResource Border}"
+                    Padding="20" Margin="0,0,0,16">
+                <VerticalStackLayout Spacing="0">
+                    <Label Text="Listing Details" Style="{StaticResource H2Label}" FontSize="17"
+                           Margin="0,0,0,16" />
 
-            <Label Text="Description" Style="{StaticResource SubtitleLabel}" />
-            <Editor Placeholder="Describe your item..." Text="{Binding Description}"
-                    HeightRequest="100" BackgroundColor="{StaticResource SurfaceVariant}"
-                    TextColor="{StaticResource TextPrimary}" />
+                    <Label Text="TITLE" Style="{StaticResource FieldLabel}" />
+                    <Entry Placeholder="e.g. Vintage Denim Jacket"
+                           Text="{Binding Title}" Style="{StaticResource ModernEntry}" />
 
-            <Label Text="Price ($)" Style="{StaticResource SubtitleLabel}" />
-            <Entry Placeholder="0.00" Text="{Binding Price}" Keyboard="Numeric" Style="{StaticResource ModernEntry}" />
+                    <Label Text="DESCRIPTION" Style="{StaticResource FieldLabel}" />
+                    <Border BackgroundColor="{StaticResource SurfaceVariant}"
+                            StrokeShape="RoundRectangle 10" Stroke="Transparent"
+                            Padding="14,10" Margin="0,2,0,0">
+                        <Editor Placeholder="Describe condition, style, brand..."
+                                Text="{Binding Description}"
+                                Style="{StaticResource ModernEditor}"
+                                HeightRequest="100"
+                                BackgroundColor="Transparent" />
+                    </Border>
 
-            <Label Text="Category" Style="{StaticResource SubtitleLabel}" />
-            <Picker ItemsSource="{Binding Categories}" SelectedItem="{Binding Category}"
-                    Title="Select category" TextColor="{StaticResource TextPrimary}"
-                    BackgroundColor="{StaticResource SurfaceVariant}" />
+                    <Label Text="PRICE ($)" Style="{StaticResource FieldLabel}" />
+                    <Entry Placeholder="0.00" Text="{Binding Price}"
+                           Keyboard="Numeric" Style="{StaticResource ModernEntry}" />
+                </VerticalStackLayout>
+            </Border>
 
-            <Label Text="Size" Style="{StaticResource SubtitleLabel}" />
-            <Picker ItemsSource="{Binding Sizes}" SelectedItem="{Binding Size}"
-                    Title="Select size" TextColor="{StaticResource TextPrimary}"
-                    BackgroundColor="{StaticResource SurfaceVariant}" />
+            <!-- Category / Size -->
+            <Border BackgroundColor="{StaticResource Surface}"
+                    StrokeShape="RoundRectangle 16" Stroke="{StaticResource Border}"
+                    Padding="20" Margin="0,0,0,16">
+                <VerticalStackLayout Spacing="0">
+                    <Label Text="Classification" Style="{StaticResource H2Label}" FontSize="17"
+                           Margin="0,0,0,16" />
 
-            <Label Text="{Binding ErrorMessage}" TextColor="{StaticResource Error}"
-                   IsVisible="{Binding ErrorMessage, Converter={StaticResource NullToFalseConverter}}" />
+                    <Label Text="CATEGORY" Style="{StaticResource FieldLabel}" />
+                    <Border BackgroundColor="{StaticResource SurfaceVariant}"
+                            StrokeShape="RoundRectangle 10" Stroke="Transparent"
+                            Padding="12,0" Margin="0,2,0,0" HeightRequest="52">
+                        <Picker ItemsSource="{Binding Categories}" SelectedItem="{Binding Category}"
+                                Title="Select category" Style="{StaticResource ModernPicker}"
+                                BackgroundColor="Transparent" />
+                    </Border>
 
+                    <Label Text="SIZE" Style="{StaticResource FieldLabel}" />
+                    <Border BackgroundColor="{StaticResource SurfaceVariant}"
+                            StrokeShape="RoundRectangle 10" Stroke="Transparent"
+                            Padding="12,0" Margin="0,2,0,0" HeightRequest="52">
+                        <Picker ItemsSource="{Binding Sizes}" SelectedItem="{Binding Size}"
+                                Title="Select size" Style="{StaticResource ModernPicker}"
+                                BackgroundColor="Transparent" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Error -->
+            <Border IsVisible="{Binding ErrorMessage, Converter={StaticResource NullToFalseConverter}}"
+                    BackgroundColor="{StaticResource ErrorSubtle}"
+                    StrokeShape="RoundRectangle 12" Stroke="Transparent"
+                    Padding="16,12" Margin="0,0,0,12">
+                <Label Text="{Binding ErrorMessage}" FontSize="13"
+                       TextColor="{StaticResource ErrorDark}" />
+            </Border>
+
+            <!-- Actions -->
             <Button Text="Post Listing" Style="{StaticResource PrimaryButton}"
                     Command="{Binding SaveCommand}"
-                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" />
-
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                    Margin="0,0,0,10" />
             <Button Text="Cancel" Style="{StaticResource SecondaryButton}"
                     Command="{Binding CancelCommand}" />
-
-            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
-                               Color="{StaticResource Primary}" HorizontalOptions="Center" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

@@ -2,35 +2,65 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- Brand Colors -->
-    <Color x:Key="Primary">#6C63FF</Color>
-    <Color x:Key="PrimaryDark">#4B44CC</Color>
-    <Color x:Key="PrimaryLight">#9D97FF</Color>
-    <Color x:Key="Secondary">#FF6584</Color>
-    <Color x:Key="Accent">#43E97B</Color>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  BRAND                                          -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <Color x:Key="Primary">#7C3AED</Color>
+    <Color x:Key="PrimaryDark">#5B21B6</Color>
+    <Color x:Key="PrimaryLight">#A78BFA</Color>
+    <Color x:Key="PrimarySubtle">#EDE9FE</Color>
 
-    <!-- Neutrals -->
-    <Color x:Key="Background">#F8F9FA</Color>
+    <Color x:Key="Secondary">#EC4899</Color>
+    <Color x:Key="SecondaryDark">#BE185D</Color>
+    <Color x:Key="SecondarySubtle">#FCE7F3</Color>
+
+    <Color x:Key="Accent">#06B6D4</Color>
+    <Color x:Key="AccentSubtle">#CFFAFE</Color>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  NEUTRALS                                       -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <Color x:Key="Background">#FAFAFA</Color>
     <Color x:Key="Surface">#FFFFFF</Color>
-    <Color x:Key="SurfaceVariant">#F1F3F5</Color>
-    <Color x:Key="OnSurface">#1A1A2E</Color>
-    <Color x:Key="OnSurfaceVariant">#6B7280</Color>
-    <Color x:Key="Divider">#E5E7EB</Color>
+    <Color x:Key="SurfaceVariant">#F5F3FF</Color>
+    <Color x:Key="SurfaceElevated">#FFFFFF</Color>
 
-    <!-- Dark Mode -->
-    <Color x:Key="BackgroundDark">#0F0F1A</Color>
-    <Color x:Key="SurfaceDark">#1A1A2E</Color>
-    <Color x:Key="SurfaceVariantDark">#252540</Color>
-    <Color x:Key="OnSurfaceDark">#F8F9FA</Color>
+    <Color x:Key="Border">#E5E7EB</Color>
+    <Color x:Key="BorderStrong">#D1D5DB</Color>
+    <Color x:Key="Divider">#F3F4F6</Color>
 
-    <!-- Status -->
-    <Color x:Key="Success">#22C55E</Color>
-    <Color x:Key="Error">#EF4444</Color>
-    <Color x:Key="Warning">#F59E0B</Color>
-
-    <!-- Text -->
-    <Color x:Key="TextPrimary">#1A1A2E</Color>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  TEXT                                           -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <Color x:Key="TextPrimary">#111827</Color>
     <Color x:Key="TextSecondary">#6B7280</Color>
+    <Color x:Key="TextTertiary">#9CA3AF</Color>
     <Color x:Key="TextOnPrimary">#FFFFFF</Color>
+    <Color x:Key="TextOnDark">#F9FAFB</Color>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  SEMANTIC                                       -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <Color x:Key="Success">#10B981</Color>
+    <Color x:Key="SuccessSubtle">#D1FAE5</Color>
+    <Color x:Key="SuccessDark">#065F46</Color>
+
+    <Color x:Key="Error">#EF4444</Color>
+    <Color x:Key="ErrorSubtle">#FEE2E2</Color>
+    <Color x:Key="ErrorDark">#991B1B</Color>
+
+    <Color x:Key="Warning">#F59E0B</Color>
+    <Color x:Key="WarningSubtle">#FEF3C7</Color>
+    <Color x:Key="WarningDark">#92400E</Color>
+
+    <Color x:Key="Info">#3B82F6</Color>
+    <Color x:Key="InfoSubtle">#DBEAFE</Color>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  OVERLAY / DARK SURFACE (for headers)          -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <Color x:Key="HeaderBg">#1E1B4B</Color>
+    <Color x:Key="HeaderBgLight">#2D2A5E</Color>
+    <Color x:Key="OverlayLight">#1A000000</Color>
 
 </ResourceDictionary>

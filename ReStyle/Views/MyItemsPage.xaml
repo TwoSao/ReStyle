@@ -13,47 +13,84 @@
 
     <Grid RowDefinitions="Auto,*">
 
-        <Button Grid.Row="0" Text="+ New Listing" Style="{StaticResource PrimaryButton}"
-                Command="{Binding AddItemCommand}" Margin="16,12" />
+        <!-- Add button bar -->
+        <Border Grid.Row="0" BackgroundColor="{StaticResource Surface}"
+                StrokeShape="RoundRectangle 0" Stroke="Transparent"
+                Padding="16,12">
+            <Border.Shadow>
+                <Shadow Brush="{StaticResource TextPrimary}" Offset="0,2" Radius="8" Opacity="0.05" />
+            </Border.Shadow>
+            <Button Text="＋  New Listing" Style="{StaticResource PrimaryButton}"
+                    HorizontalOptions="Fill"
+                    Command="{Binding AddItemCommand}" />
+        </Border>
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Items}" Margin="16,0">
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Items}" Margin="16,8">
             <CollectionView.EmptyView>
-                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Margin="0,60" Spacing="12">
-                    <Label Text="🛍️" FontSize="64" HorizontalOptions="Center" />
-                    <Label Text="No listings yet" Style="{StaticResource TitleLabel}" HorizontalOptions="Center" />
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
+                                     Spacing="12" Margin="0,80">
+                    <Label Text="🛍️" FontSize="72" HorizontalOptions="Center" />
+                    <Label Text="No listings yet" Style="{StaticResource H2Label}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Tap the button above to post your first item"
+                           Style="{StaticResource SubtitleLabel}" HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="dto:ItemDto">
-                    <Frame Style="{StaticResource CardFrame}" Padding="12">
-                        <Grid ColumnDefinitions="80,*,Auto" ColumnSpacing="12">
-                            <Image Grid.Column="0" Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}"
-                                   WidthRequest="80" HeightRequest="80" Aspect="AspectFill" />
-                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="4">
-                                <Label Text="{Binding Title}" Style="{StaticResource TitleLabel}" FontSize="15"
+                    <Border Margin="0,5"
+                            BackgroundColor="{StaticResource Surface}"
+                            StrokeShape="RoundRectangle 16"
+                            Stroke="{StaticResource Border}" StrokeThickness="1">
+                        <Border.Shadow>
+                            <Shadow Brush="{StaticResource TextPrimary}"
+                                    Offset="0,2" Radius="8" Opacity="0.06" />
+                        </Border.Shadow>
+                        <Grid ColumnDefinitions="88,*,Auto" ColumnSpacing="0" Padding="12">
+                            <!-- Thumbnail -->
+                            <Border Grid.Column="0"
+                                    StrokeShape="RoundRectangle 12"
+                                    Stroke="Transparent"
+                                    WidthRequest="88" HeightRequest="88"
+                                    BackgroundColor="{StaticResource SurfaceVariant}">
+                                <Image Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}"
+                                       Aspect="AspectFill" WidthRequest="88" HeightRequest="88" />
+                            </Border>
+
+                            <!-- Info -->
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center"
+                                                 Padding="12,0" Spacing="4">
+                                <Label Text="{Binding Title}" FontSize="15" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}"
                                        LineBreakMode="TailTruncation" MaxLines="1" />
-                                <Label Text="{Binding Price, StringFormat='${0:F2}'}" Style="{StaticResource PriceLabel}" FontSize="15" />
-                                <Frame Padding="6,2" CornerRadius="6" HasShadow="False"
-                                       BackgroundColor="{Binding Status, Converter={StaticResource StatusColorConverter}}"
-                                       HorizontalOptions="Start">
-                                    <Label Text="{Binding Status}" TextColor="White" FontSize="11" />
-                                </Frame>
+                                <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                                       FontSize="16" FontAttributes="Bold"
+                                       TextColor="{StaticResource Primary}" />
+                                <Border BackgroundColor="{Binding Status, Converter={StaticResource StatusColorConverter}}"
+                                        StrokeShape="RoundRectangle 6"
+                                        Stroke="Transparent" Padding="8,3"
+                                        HorizontalOptions="Start">
+                                    <Label Text="{Binding Status}" TextColor="White"
+                                           FontSize="11" FontAttributes="Bold" />
+                                </Border>
                             </VerticalStackLayout>
+
+                            <!-- Actions -->
                             <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" Spacing="6">
                                 <Button Text="Edit" Style="{StaticResource SecondaryButton}"
-                                        HeightRequest="36" Padding="12,0"
+                                        HeightRequest="36" Padding="14,0" FontSize="13"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditItemCommand}"
                                         CommandParameter="{Binding .}" />
                                 <Button Text="Delete" Style="{StaticResource DangerButton}"
+                                        HeightRequest="36" Padding="14,0" FontSize="13"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteItemCommand}"
                                         CommandParameter="{Binding .}" />
                             </VerticalStackLayout>
                         </Grid>
-                    </Frame>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
     </Grid>
-
 </ContentPage>

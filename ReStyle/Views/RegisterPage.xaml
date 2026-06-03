@@ -1,49 +1,99 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:ReStyle.Converters"
              x:Class="ReStyle.Views.RegisterPage"
              Title=""
              Shell.NavBarIsVisible="False">
 
+    <ContentPage.Resources>
+        <conv:NullToFalseConverter x:Key="NullToFalseConverter" />
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </ContentPage.Resources>
+
     <ScrollView>
-        <VerticalStackLayout Padding="32,60,32,32" Spacing="0">
+        <Grid RowDefinitions="200,*">
 
-            <Label Text="ReStyle" FontSize="42" FontAttributes="Bold"
-                   TextColor="{StaticResource Primary}" HorizontalOptions="Center" />
-            <Label Text="Join the community" Style="{StaticResource SubtitleLabel}"
-                   HorizontalOptions="Center" Margin="0,4,0,48" />
-
-            <Frame Style="{StaticResource CardFrame}" Padding="24">
-                <VerticalStackLayout Spacing="12">
-                    <Label Text="Create Account" Style="{StaticResource TitleLabel}" />
-
-                    <Entry Placeholder="Username" Text="{Binding Username}" Style="{StaticResource ModernEntry}" />
-                    <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" Style="{StaticResource ModernEntry}" />
-                    <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True" Style="{StaticResource ModernEntry}" />
-                    <Entry Placeholder="Confirm Password" Text="{Binding ConfirmPassword}" IsPassword="True" Style="{StaticResource ModernEntry}" />
-
-                    <Label Text="{Binding ErrorMessage}" TextColor="{StaticResource Error}"
-                           IsVisible="{Binding ErrorMessage, Converter={StaticResource NullToFalseConverter}}"
-                           FontSize="13" Margin="0,4" />
-
-                    <Button Text="Create Account" Style="{StaticResource PrimaryButton}"
-                            Command="{Binding RegisterCommand}"
-                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
-                            Margin="0,8,0,0" />
-
-                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
-                                       Color="{StaticResource Primary}" HorizontalOptions="Center" />
+            <!-- ── Hero Header ── -->
+            <Grid Grid.Row="0" BackgroundColor="{StaticResource HeaderBg}">
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
+                    <Border StrokeShape="RoundRectangle 24"
+                            BackgroundColor="#FFFFFF18"
+                            Stroke="Transparent"
+                            WidthRequest="72" HeightRequest="72"
+                            HorizontalOptions="Center">
+                        <Label Text="✦" FontSize="32" TextColor="White"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <Label Text="Join ReStyle" FontSize="28" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center" />
+                    <Label Text="Start buying &amp; selling today" FontSize="13"
+                           TextColor="#A5B4FC" HorizontalOptions="Center" />
                 </VerticalStackLayout>
-            </Frame>
+            </Grid>
 
-            <HorizontalStackLayout HorizontalOptions="Center" Margin="0,24,0,0" Spacing="4">
-                <Label Text="Already have an account?" Style="{StaticResource SubtitleLabel}" VerticalOptions="Center" />
-                <Button Text="Sign In" Command="{Binding GoToLoginCommand}"
-                        HeightRequest="36" Padding="12,0" BorderWidth="0"
-                        TextColor="{StaticResource Primary}" BackgroundColor="Transparent" />
-            </HorizontalStackLayout>
+            <!-- ── Form ── -->
+            <VerticalStackLayout Grid.Row="1" Padding="24,0,24,32" Spacing="0">
 
-        </VerticalStackLayout>
+                <Border Margin="0,-28,0,0"
+                        BackgroundColor="{StaticResource Surface}"
+                        StrokeShape="RoundRectangle 20"
+                        Stroke="{StaticResource Border}"
+                        Padding="24">
+                    <Border.Shadow>
+                        <Shadow Brush="{StaticResource TextPrimary}" Offset="0,4" Radius="20" Opacity="0.08" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="0">
+                        <Label Text="Create Account" Style="{StaticResource H2Label}" />
+                        <Label Text="Fill in your details to get started" Style="{StaticResource SubtitleLabel}"
+                               Margin="0,4,0,20" />
+
+                        <Label Text="USERNAME" Style="{StaticResource FieldLabel}" />
+                        <Entry Placeholder="johndoe" Text="{Binding Username}"
+                               Style="{StaticResource ModernEntry}" />
+
+                        <Label Text="EMAIL" Style="{StaticResource FieldLabel}" />
+                        <Entry Placeholder="you@example.com" Text="{Binding Email}"
+                               Keyboard="Email" Style="{StaticResource ModernEntry}" />
+
+                        <Label Text="PASSWORD" Style="{StaticResource FieldLabel}" />
+                        <Entry Placeholder="Min. 6 characters" Text="{Binding Password}"
+                               IsPassword="True" Style="{StaticResource ModernEntry}" />
+
+                        <Label Text="CONFIRM PASSWORD" Style="{StaticResource FieldLabel}" />
+                        <Entry Placeholder="Repeat password" Text="{Binding ConfirmPassword}"
+                               IsPassword="True" Style="{StaticResource ModernEntry}" />
+
+                        <!-- Error -->
+                        <Border IsVisible="{Binding ErrorMessage, Converter={StaticResource NullToFalseConverter}}"
+                                BackgroundColor="{StaticResource ErrorSubtle}"
+                                StrokeShape="RoundRectangle 10"
+                                Stroke="Transparent"
+                                Padding="12,10" Margin="0,12,0,0">
+                            <Label Text="{Binding ErrorMessage}" FontSize="13"
+                                   TextColor="{StaticResource ErrorDark}" />
+                        </Border>
+
+                        <Button Text="Create Account" Style="{StaticResource PrimaryButton}"
+                                Command="{Binding RegisterCommand}"
+                                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                                Margin="0,20,0,0" />
+
+                        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                           IsVisible="{Binding IsBusy}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <HorizontalStackLayout HorizontalOptions="Center" Margin="0,20,0,0" Spacing="4">
+                    <Label Text="Already have an account?" Style="{StaticResource SubtitleLabel}"
+                           VerticalOptions="Center" />
+                    <Button Text="Sign In" Style="{StaticResource GhostButton}"
+                            Command="{Binding GoToLoginCommand}"
+                            FontAttributes="Bold" />
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </Grid>
     </ScrollView>
 
 </ContentPage>

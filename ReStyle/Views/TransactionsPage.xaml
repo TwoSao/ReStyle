@@ -7,40 +7,96 @@
 
     <Grid RowDefinitions="Auto,*">
 
-        <!-- Tab selector -->
-        <HorizontalStackLayout Grid.Row="0" Margin="16,12" Spacing="8">
-            <Button Text="Purchases" Style="{StaticResource PrimaryButton}"
-                    HeightRequest="40" Padding="20,0" Clicked="OnPurchasesTab" x:Name="PurchasesBtn" />
-            <Button Text="Sales" Style="{StaticResource SecondaryButton}"
-                    HeightRequest="40" Padding="20,0" Clicked="OnSalesTab" x:Name="SalesBtn" />
-        </HorizontalStackLayout>
+        <!-- Tab bar -->
+        <Border Grid.Row="0" BackgroundColor="{StaticResource Surface}"
+                StrokeShape="RoundRectangle 0" Stroke="Transparent"
+                Padding="16,12,16,0">
+            <Border.Shadow>
+                <Shadow Brush="{StaticResource TextPrimary}" Offset="0,2" Radius="8" Opacity="0.05" />
+            </Border.Shadow>
+            <Border BackgroundColor="{StaticResource SurfaceVariant}"
+                    StrokeShape="RoundRectangle 12" Stroke="Transparent"
+                    Padding="4" HeightRequest="48">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="0">
+                    <Border Grid.Column="0" x:Name="PurchasesTabBg"
+                            BackgroundColor="{StaticResource Primary}"
+                            StrokeShape="RoundRectangle 10" Stroke="Transparent">
+                        <Button x:Name="PurchasesBtn" Text="Purchases"
+                                BackgroundColor="Transparent"
+                                TextColor="White"
+                                FontSize="14" FontAttributes="Bold"
+                                BorderWidth="0" HeightRequest="40"
+                                Clicked="OnPurchasesTab" />
+                    </Border>
+                    <Border Grid.Column="1" x:Name="SalesTabBg"
+                            BackgroundColor="Transparent"
+                            StrokeShape="RoundRectangle 10" Stroke="Transparent">
+                        <Button x:Name="SalesBtn" Text="Sales"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource TextSecondary}"
+                                FontSize="14"
+                                BorderWidth="0" HeightRequest="40"
+                                Clicked="OnSalesTab" />
+                    </Border>
+                </Grid>
+            </Border>
+        </Border>
 
-        <CollectionView Grid.Row="1" x:Name="TransactionsList" Margin="16,0">
+        <!-- List -->
+        <CollectionView Grid.Row="1" x:Name="TransactionsList" Margin="16,8">
             <CollectionView.EmptyView>
-                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Margin="0,60" Spacing="12">
-                    <Label Text="📋" FontSize="64" HorizontalOptions="Center" />
-                    <Label Text="No transactions yet" Style="{StaticResource TitleLabel}" HorizontalOptions="Center" />
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
+                                     Spacing="12" Margin="0,80">
+                    <Label Text="📋" FontSize="72" HorizontalOptions="Center" />
+                    <Label Text="No transactions yet" Style="{StaticResource H2Label}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Your purchases and sales will appear here"
+                           Style="{StaticResource SubtitleLabel}" HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="dto:TransactionDto">
-                    <Frame Style="{StaticResource CardFrame}" Padding="16">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <VerticalStackLayout Grid.Column="0" Spacing="4">
-                                <Label Text="{Binding ItemTitle}" Style="{StaticResource TitleLabel}" FontSize="15" />
+                    <Border Margin="0,5"
+                            BackgroundColor="{StaticResource Surface}"
+                            StrokeShape="RoundRectangle 16"
+                            Stroke="{StaticResource Border}" StrokeThickness="1">
+                        <Border.Shadow>
+                            <Shadow Brush="{StaticResource TextPrimary}"
+                                    Offset="0,2" Radius="8" Opacity="0.05" />
+                        </Border.Shadow>
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="0" Padding="16">
+                            <!-- Icon -->
+                            <Border Grid.Column="0"
+                                    BackgroundColor="{StaticResource PrimarySubtle}"
+                                    StrokeShape="RoundRectangle 12"
+                                    Stroke="Transparent"
+                                    WidthRequest="44" HeightRequest="44"
+                                    Margin="0,0,14,0">
+                                <Label Text="🛍️" FontSize="20"
+                                       HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <!-- Info -->
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
+                                <Label Text="{Binding ItemTitle}"
+                                       FontSize="14" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}"
+                                       LineBreakMode="TailTruncation" MaxLines="1" />
                                 <Label Text="{Binding TransactionDate, StringFormat='{0:MMM dd, yyyy}'}"
-                                       Style="{StaticResource SubtitleLabel}" FontSize="12" />
+                                       FontSize="12" TextColor="{StaticResource TextTertiary}" />
                                 <Label Text="{Binding BuyerUsername, StringFormat='Buyer: {0}'}"
-                                       Style="{StaticResource SubtitleLabel}" FontSize="12" />
+                                       FontSize="12" TextColor="{StaticResource TextTertiary}" />
                             </VerticalStackLayout>
-                            <Label Grid.Column="1" Text="{Binding Amount, StringFormat='${0:F2}'}"
-                                   Style="{StaticResource PriceLabel}" VerticalOptions="Center" />
+                            <!-- Amount -->
+                            <Label Grid.Column="2"
+                                   Text="{Binding Amount, StringFormat='${0:F2}'}"
+                                   FontSize="17" FontAttributes="Bold"
+                                   TextColor="{StaticResource Primary}"
+                                   VerticalOptions="Center" />
                         </Grid>
-                    </Frame>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
     </Grid>
-
 </ContentPage>
