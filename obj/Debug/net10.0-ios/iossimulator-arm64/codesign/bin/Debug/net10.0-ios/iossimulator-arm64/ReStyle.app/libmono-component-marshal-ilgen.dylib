@@ -1,0 +1,1 @@
+-v --force --timestamp=none --sign - /Users/martin/Downloads/ReStyle-master/ReStyle/bin/Debug/net10.0-ios/iossimulator-arm64/ReStyle.app/libmono-component-marshal-ilgen.dylib

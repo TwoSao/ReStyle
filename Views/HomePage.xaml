@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dto="clr-namespace:ReStyle.Application.DTOs"
+             xmlns:conv="clr-namespace:ReStyle.Converters"
+             x:Class="ReStyle.Views.HomePage"
+             Title="ReStyle">
+
+    <ContentPage.Resources>
+        <conv:ImagePathConverter x:Key="ImagePathConverter" />
+        <conv:ItemStatusToColorConverter x:Key="StatusColorConverter" />
+        <conv:NullToFalseConverter x:Key="NullToFalseConverter" />
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- ── Top Bar ── -->
+        <Grid Grid.Row="0" BackgroundColor="{StaticResource Surface}"
+              Padding="16,12,16,12">
+            <Grid.Shadow>
+                <Shadow Brush="{StaticResource TextPrimary}" Offset="0,2" Radius="8" Opacity="0.06" />
+            </Grid.Shadow>
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                <!-- Search -->
+                <Border Grid.Column="0"
+                        BackgroundColor="{StaticResource SurfaceVariant}"
+                        StrokeShape="RoundRectangle 14"
+                        Stroke="{StaticResource Border}"
+                        StrokeThickness="1"
+                        Padding="14,0">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Label Grid.Column="0" Text="🔍" FontSize="16"
+                               VerticalOptions="Center" Margin="0,0,8,0"
+                               TextColor="{StaticResource TextTertiary}" />
+                        <Entry Grid.Column="1"
+                               Placeholder="Search fashion..."
+                               Text="{Binding SearchQuery}"
+                               ReturnCommand="{Binding SearchCommand}"
+                               BackgroundColor="Transparent"
+                               PlaceholderColor="{StaticResource TextTertiary}"
+                               TextColor="{StaticResource TextPrimary}"
+                               FontSize="14"
+                               VerticalOptions="Center" />
+                        <Button Grid.Column="2" Text="Go" FontSize="12"
+                                BackgroundColor="{StaticResource Primary}"
+                                TextColor="White" CornerRadius="8"
+                                HeightRequest="32" Padding="10,0"
+                                Command="{Binding SearchCommand}"
+                                VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+                <!-- Add button -->
+                <Button Grid.Column="1"
+                        Text="＋"
+                        FontSize="20" FontAttributes="Bold"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        CornerRadius="14"
+                        WidthRequest="48" HeightRequest="48"
+                        Padding="0"
+                        Command="{Binding GoToAddItemCommand}">
+                    <Button.Shadow>
+                        <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="10" Opacity="0.4" />
+                    </Button.Shadow>
+                </Button>
+            </Grid>
+        </Grid>
+
+        <!-- ── Items Grid ── -->
+        <RefreshView Grid.Row="1"
+                     Command="{Binding LoadItemsCommand}"
+                     IsRefreshing="{Binding IsBusy}"
+                     RefreshColor="{StaticResource Primary}">
+            <CollectionView ItemsSource="{Binding Items}"
+                            ItemsLayout="VerticalGrid, 2"
+                            Margin="12,8">
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
+                                         Spacing="12" Margin="0,80">
+                        <Label Text="👗" FontSize="72" HorizontalOptions="Center" />
+                        <Label Text="Nothing here yet" Style="{StaticResource H2Label}"
+                               HorizontalOptions="Center" />
+                        <Label Text="Be the first to list something!" Style="{StaticResource SubtitleLabel}"
+                               HorizontalOptions="Center" />
+                        <Button Text="Post a Listing" Style="{StaticResource PrimaryButton}"
+                                HorizontalOptions="Center"
+                                Command="{Binding GoToAddItemCommand}" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="dto:ItemDto">
+                        <Border Margin="5" StrokeShape="RoundRectangle 16"
+                                BackgroundColor="{StaticResource Surface}"
+                                Stroke="{StaticResource Border}"
+                                StrokeThickness="1">
+                            <Border.Shadow>
+                                <Shadow Brush="{StaticResource TextPrimary}"
+                                        Offset="0,3" Radius="10" Opacity="0.07" />
+                            </Border.Shadow>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenItemCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+
+                            <Grid RowDefinitions="168,Auto">
+                                <!-- Image -->
+                                <Grid Grid.Row="0">
+                                    <Image Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}"
+                                           Aspect="AspectFill" HeightRequest="168" />
+                                    <!-- Gradient overlay for badge readability -->
+                                    <BoxView Color="#00000000" />
+                                    <!-- Status badge -->
+                                    <Border HorizontalOptions="End" VerticalOptions="Start"
+                                            Margin="8" Padding="8,4"
+                                            BackgroundColor="{Binding Status, Converter={StaticResource StatusColorConverter}}"
+                                            StrokeShape="RoundRectangle 8"
+                                            Stroke="Transparent">
+                                        <Label Text="{Binding Status}" TextColor="White"
+                                               FontSize="10" FontAttributes="Bold" />
+                                    </Border>
+                                </Grid>
+
+                                <!-- Info -->
+                                <VerticalStackLayout Grid.Row="1" Padding="12,10,12,12" Spacing="3">
+                                    <Label Text="{Binding Title}" FontSize="13" FontAttributes="Bold"
+                                           TextColor="{StaticResource TextPrimary}"
+                                           LineBreakMode="TailTruncation" MaxLines="1" />
+                                    <Label Text="{Binding SellerUsername}" FontSize="11"
+                                           TextColor="{StaticResource TextTertiary}" />
+                                    <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                                           FontSize="16" FontAttributes="Bold"
+                                           TextColor="{StaticResource Primary}" Margin="0,2,0,0" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+    </Grid>
+</ContentPage>

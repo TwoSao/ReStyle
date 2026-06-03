@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:ReStyle.Converters"
+             x:Class="ReStyle.Views.ItemDetailsPage"
+             Title="">
+
+    <ContentPage.Resources>
+        <conv:ImagePathConverter x:Key="ImagePathConverter" />
+        <conv:ItemStatusToColorConverter x:Key="StatusColorConverter" />
+        <conv:ItemStatusToTextConverter x:Key="StatusTextConverter" />
+        <conv:NullToFalseConverter x:Key="NullToFalseConverter" />
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*,Auto">
+
+        <!-- ── Scrollable content ── -->
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Hero image -->
+                <Grid HeightRequest="340">
+                    <Image Source="{Binding Item.ImagePath, Converter={StaticResource ImagePathConverter}}"
+                           Aspect="AspectFill" HeightRequest="340" />
+                    <!-- Dark gradient at bottom for readability -->
+                    <BoxView VerticalOptions="End" HeightRequest="80"
+                             Color="#CC000000" Opacity="0.45" />
+                    <!-- Price overlay -->
+                    <Label Text="{Binding Item.Price, StringFormat='${0:F2}'}"
+                           FontSize="28" FontAttributes="Bold" TextColor="White"
+                           VerticalOptions="End" HorizontalOptions="Start"
+                           Margin="20,0,0,20" />
+                    <!-- Status badge overlay -->
+                    <Border HorizontalOptions="End" VerticalOptions="Start"
+                            Margin="16"
+                            BackgroundColor="{Binding Item.Status, Converter={StaticResource StatusColorConverter}}"
+                            StrokeShape="RoundRectangle 10"
+                            Stroke="Transparent"
+                            Padding="12,6">
+                        <Label Text="{Binding Item.Status, Converter={StaticResource StatusTextConverter}}"
+                               TextColor="White" FontSize="12" FontAttributes="Bold" />
+                    </Border>
+                </Grid>
+
+                <VerticalStackLayout Padding="20,20,20,120" Spacing="16">
+
+                    <!-- Title -->
+                    <Label Text="{Binding Item.Title}" Style="{StaticResource H1Label}"
+                           LineBreakMode="WordWrap" />
+
+                    <!-- Chips row -->
+                    <HorizontalStackLayout Spacing="8">
+                        <Border Style="{StaticResource Chip}">
+                            <Label Text="{Binding Item.Category}" FontSize="13"
+                                   TextColor="{StaticResource Primary}" FontAttributes="Bold" />
+                        </Border>
+                        <Border Style="{StaticResource Chip}">
+                            <Label Text="{Binding Item.Size}" FontSize="13"
+                                   TextColor="{StaticResource TextSecondary}" />
+                        </Border>
+                    </HorizontalStackLayout>
+
+                    <!-- Divider -->
+                    <BoxView Style="{StaticResource HDivider}" Margin="0" />
+
+                    <!-- Seller card -->
+                    <Border BackgroundColor="{StaticResource SurfaceVariant}"
+                            StrokeShape="RoundRectangle 14"
+                            Stroke="Transparent" Padding="14">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                            <Border Grid.Column="0"
+                                    BackgroundColor="{StaticResource Primary}"
+                                    StrokeShape="RoundRectangle 22"
+                                    Stroke="Transparent"
+                                    WidthRequest="44" HeightRequest="44">
+                                <Label Text="👤" FontSize="20"
+                                       HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                <Label Text="SELLER" Style="{StaticResource CaptionLabel}"
+                                       TextColor="{StaticResource TextTertiary}" />
+                                <Label Text="{Binding Item.SellerUsername}"
+                                       FontSize="15" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <!-- Description -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Description" Style="{StaticResource H2Label}" FontSize="17" />
+                        <Label Text="{Binding Item.Description}" Style="{StaticResource BodyLabel}"
+                               TextColor="{StaticResource TextSecondary}" />
+                    </VerticalStackLayout>
+
+                    <!-- Status message -->
+                    <Border IsVisible="{Binding StatusMessage, Converter={StaticResource NullToFalseConverter}}"
+                            BackgroundColor="{StaticResource SuccessSubtle}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="Transparent"
+                            Padding="16,12">
+                        <Label Text="{Binding StatusMessage}" FontSize="14"
+                               TextColor="{StaticResource SuccessDark}"
+                               FontAttributes="Bold" HorizontalOptions="Center" />
+                    </Border>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ── Sticky Bottom Bar ── -->
+        <Border Grid.Row="1"
+                BackgroundColor="{StaticResource Surface}"
+                StrokeShape="RoundRectangle 0"
+                Stroke="Transparent"
+                Padding="20,12,20,20">
+            <Border.Shadow>
+                <Shadow Brush="{StaticResource TextPrimary}" Offset="0,-4" Radius="16" Opacity="0.08" />
+            </Border.Shadow>
+            <Grid RowDefinitions="Auto">
+                <!-- Buy button (non-admin) -->
+                <Button Text="Buy Now"
+                        Style="{StaticResource PrimaryButton}"
+                        Command="{Binding BuyCommand}"
+                        IsVisible="{Binding CanBuy}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                        HorizontalOptions="Fill" />
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                                   HorizontalOptions="Center" Margin="8,0" />
+                <!-- Admin actions -->
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10"
+                      IsVisible="{Binding IsAdmin}">
+                    <Button Grid.Column="0"
+                            Text="Edit"
+                            Style="{StaticResource SecondaryButton}"
+                            Command="{Binding EditCommand}"
+                            HorizontalOptions="Fill" />
+                    <Button Grid.Column="1"
+                            Text="Delete"
+                            Style="{StaticResource DangerButton}"
+                            Command="{Binding DeleteCommand}"
+                            WidthRequest="90" />
+                </Grid>
+                <!-- Not available (non-admin, can't buy) -->
+                <Border BackgroundColor="{StaticResource SurfaceVariant}"
+                        StrokeShape="RoundRectangle 14"
+                        Stroke="{StaticResource Border}"
+                        Padding="16,14"
+                        IsVisible="{Binding ShowNotAvailable}">
+                    <Label Text="Not available for purchase"
+                           FontSize="14" TextColor="{StaticResource TextTertiary}"
+                           HorizontalOptions="Center" />
+                </Border>
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>

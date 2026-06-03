@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:ReStyle.Converters"
+             x:Class="ReStyle.Views.BalancePage"
+             Title="Balance">
+
+    <ContentPage.Resources>
+        <conv:NullToFalseConverter x:Key="NullToFalseConverter" />
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Hero balance block -->
+            <Grid BackgroundColor="{StaticResource HeaderBg}" Padding="24,48,24,40">
+                <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                    <Label Text="CURRENT BALANCE" FontSize="12" FontAttributes="Bold"
+                           TextColor="#A5B4FC" HorizontalOptions="Center"
+                           CharacterSpacing="1.5" />
+                    <Label Text="{Binding Balance, StringFormat='${0:F2}'}"
+                           FontSize="52" FontAttributes="Bold" TextColor="White"
+                           HorizontalOptions="Center" />
+                    <Label Text="Available to spend" FontSize="13" TextColor="#A5B4FC"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <VerticalStackLayout Padding="20,0,20,40" Spacing="0">
+
+                <!-- Top Up form card -->
+                <Border Margin="0,-24,0,0"
+                        BackgroundColor="{StaticResource Surface}"
+                        StrokeShape="RoundRectangle 20"
+                        Stroke="{StaticResource Border}"
+                        Padding="24">
+                    <Border.Shadow>
+                        <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="20" Opacity="0.10" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="0">
+                        <Label Text="Top Up Balance" FontSize="18" FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}" />
+                        <Label Text="Add funds to your account" Style="{StaticResource SubtitleLabel}"
+                               Margin="0,2,0,20" />
+
+                        <Label Text="CARD NUMBER" Style="{StaticResource FieldLabel}" />
+                        <Entry Placeholder="1234 5678 9012 3456"
+                               Text="{Binding CardNumber}"
+                               Keyboard="Numeric"
+                               Style="{StaticResource ModernEntry}"
+                               MaxLength="19" />
+
+                        <Label Text="AMOUNT ($)" Style="{StaticResource FieldLabel}" />
+                        <Entry Placeholder="0.00" Text="{Binding Amount}"
+                               Keyboard="Numeric" Style="{StaticResource ModernEntry}" />
+
+                        <!-- Quick amounts -->
+                        <Label Text="QUICK SELECT" Style="{StaticResource FieldLabel}" />
+                        <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8" Margin="0,4,0,0">
+                            <Button Grid.Column="0" Text="$10"
+                                    BackgroundColor="{StaticResource PrimarySubtle}"
+                                    TextColor="{StaticResource Primary}"
+                                    BorderColor="Transparent" BorderWidth="0"
+                                    CornerRadius="10" HeightRequest="40"
+                                    FontSize="13" FontAttributes="Bold"
+                                    Clicked="OnQuickAmount" CommandParameter="10" />
+                            <Button Grid.Column="1" Text="$25"
+                                    BackgroundColor="{StaticResource PrimarySubtle}"
+                                    TextColor="{StaticResource Primary}"
+                                    BorderColor="Transparent" BorderWidth="0"
+                                    CornerRadius="10" HeightRequest="40"
+                                    FontSize="13" FontAttributes="Bold"
+                                    Clicked="OnQuickAmount" CommandParameter="25" />
+                            <Button Grid.Column="2" Text="$50"
+                                    BackgroundColor="{StaticResource PrimarySubtle}"
+                                    TextColor="{StaticResource Primary}"
+                                    BorderColor="Transparent" BorderWidth="0"
+                                    CornerRadius="10" HeightRequest="40"
+                                    FontSize="13" FontAttributes="Bold"
+                                    Clicked="OnQuickAmount" CommandParameter="50" />
+                            <Button Grid.Column="3" Text="$100"
+                                    BackgroundColor="{StaticResource PrimarySubtle}"
+                                    TextColor="{StaticResource Primary}"
+                                    BorderColor="Transparent" BorderWidth="0"
+                                    CornerRadius="10" HeightRequest="40"
+                                    FontSize="13" FontAttributes="Bold"
+                                    Clicked="OnQuickAmount" CommandParameter="100" />
+                        </Grid>
+
+                        <!-- Success message -->
+                        <Border IsVisible="{Binding Message, Converter={StaticResource NullToFalseConverter}}"
+                                BackgroundColor="{StaticResource SuccessSubtle}"
+                                StrokeShape="RoundRectangle 10"
+                                Stroke="Transparent" Padding="14,10" Margin="0,16,0,0">
+                            <Label Text="{Binding Message}" FontSize="13"
+                                   TextColor="{StaticResource SuccessDark}" FontAttributes="Bold"
+                                   HorizontalOptions="Center" />
+                        </Border>
+
+                        <Button Text="Top Up Now" Style="{StaticResource PrimaryButton}"
+                                Command="{Binding TopUpCommand}"
+                                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                                Margin="0,20,0,0" />
+                        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Info note -->
+                <Border Margin="0,16,0,0"
+                        BackgroundColor="{StaticResource InfoSubtle}"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="Transparent" Padding="16,12">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="ℹ️" FontSize="16" VerticalOptions="Center" />
+                        <Label Text="Funds are added instantly and available immediately for purchases."
+                               FontSize="13" TextColor="{StaticResource Info}"
+                               VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dto="clr-namespace:ReStyle.Application.DTOs"
+             xmlns:conv="clr-namespace:ReStyle.Converters"
+             x:Class="ReStyle.Views.MyItemsPage"
+             Title="My Listings">
+
+    <ContentPage.Resources>
+        <conv:ImagePathConverter x:Key="ImagePathConverter" />
+        <conv:ItemStatusToColorConverter x:Key="StatusColorConverter" />
+        <conv:IsNotSoldConverter x:Key="IsNotSoldConverter" />
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!-- Add button bar -->
+        <Border Grid.Row="0" BackgroundColor="{StaticResource Surface}"
+                StrokeShape="RoundRectangle 0" Stroke="Transparent"
+                Padding="16,12">
+            <Border.Shadow>
+                <Shadow Brush="{StaticResource TextPrimary}" Offset="0,2" Radius="8" Opacity="0.05" />
+            </Border.Shadow>
+            <Button Text="＋  New Listing" Style="{StaticResource PrimaryButton}"
+                    HorizontalOptions="Fill"
+                    Command="{Binding AddItemCommand}" />
+        </Border>
+
+        <!-- Tab bar -->
+        <Border Grid.Row="1" BackgroundColor="{StaticResource Surface}"
+                StrokeShape="RoundRectangle 0" Stroke="Transparent"
+                Padding="16,4,16,12">
+            <Border BackgroundColor="{StaticResource SurfaceVariant}"
+                    StrokeShape="RoundRectangle 12" Stroke="Transparent"
+                    Padding="4" HeightRequest="48">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="0">
+                    <Border Grid.Column="0" x:Name="ActiveTabBg"
+                            BackgroundColor="{StaticResource Primary}"
+                            StrokeShape="RoundRectangle 10" Stroke="Transparent">
+                        <Button Text="Active" BackgroundColor="Transparent"
+                                TextColor="White" FontSize="14" FontAttributes="Bold"
+                                BorderWidth="0" HeightRequest="40"
+                                Clicked="OnActiveTab" />
+                    </Border>
+                    <Border Grid.Column="1" x:Name="SoldTabBg"
+                            BackgroundColor="Transparent"
+                            StrokeShape="RoundRectangle 10" Stroke="Transparent">
+                        <Button Text="Sold" BackgroundColor="Transparent"
+                                TextColor="{StaticResource TextSecondary}"
+                                FontSize="14" BorderWidth="0" HeightRequest="40"
+                                Clicked="OnSoldTab" />
+                    </Border>
+                </Grid>
+            </Border>
+        </Border>
+
+        <!-- Active items list -->
+        <CollectionView Grid.Row="2" x:Name="ActiveList" ItemsSource="{Binding Items}" Margin="16,8">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
+                                     Spacing="12" Margin="0,80">
+                    <Label Text="🛍️" FontSize="72" HorizontalOptions="Center" />
+                    <Label Text="No listings yet" Style="{StaticResource H2Label}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Tap the button above to post your first item"
+                           Style="{StaticResource SubtitleLabel}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dto:ItemDto">
+                    <Border Margin="0,5"
+                            BackgroundColor="{StaticResource Surface}"
+                            StrokeShape="RoundRectangle 16"
+                            Stroke="{StaticResource Border}" StrokeThickness="1">
+                        <Border.Shadow>
+                            <Shadow Brush="{StaticResource TextPrimary}"
+                                    Offset="0,2" Radius="8" Opacity="0.06" />
+                        </Border.Shadow>
+                        <Grid ColumnDefinitions="88,*,Auto" ColumnSpacing="0" Padding="12">
+                            <Border Grid.Column="0"
+                                    StrokeShape="RoundRectangle 12"
+                                    Stroke="Transparent"
+                                    WidthRequest="88" HeightRequest="88"
+                                    BackgroundColor="{StaticResource SurfaceVariant}">
+                                <Image Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}"
+                                       Aspect="AspectFill" WidthRequest="88" HeightRequest="88" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center"
+                                                 Padding="12,0" Spacing="4">
+                                <Label Text="{Binding Title}" FontSize="15" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}"
+                                       LineBreakMode="TailTruncation" MaxLines="1" />
+                                <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                                       FontSize="16" FontAttributes="Bold"
+                                       TextColor="{StaticResource Primary}" />
+                                <Border BackgroundColor="{Binding Status, Converter={StaticResource StatusColorConverter}}"
+                                        StrokeShape="RoundRectangle 6"
+                                        Stroke="Transparent" Padding="8,3"
+                                        HorizontalOptions="Start">
+                                    <Label Text="{Binding Status}" TextColor="White"
+                                           FontSize="11" FontAttributes="Bold" />
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" Spacing="6">
+                                <Button Text="Edit" Style="{StaticResource SecondaryButton}"
+                                        HeightRequest="36" Padding="14,0" FontSize="13"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditItemCommand}"
+                                        CommandParameter="{Binding .}" />
+                                <Button Text="Delete" Style="{StaticResource DangerButton}"
+                                        HeightRequest="36" Padding="14,0" FontSize="13"
+                                        IsVisible="{Binding Status, Converter={StaticResource IsNotSoldConverter}}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteItemCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Sold items list -->
+        <CollectionView Grid.Row="2" x:Name="SoldList" ItemsSource="{Binding SoldItems}"
+                        Margin="16,8" IsVisible="False">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
+                                     Spacing="12" Margin="0,80">
+                    <Label Text="💰" FontSize="72" HorizontalOptions="Center" />
+                    <Label Text="No sold items yet" Style="{StaticResource H2Label}"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dto:ItemDto">
+                    <Border Margin="0,5"
+                            BackgroundColor="{StaticResource Surface}"
+                            StrokeShape="RoundRectangle 16"
+                            Stroke="{StaticResource Border}" StrokeThickness="1">
+                        <Border.Shadow>
+                            <Shadow Brush="{StaticResource TextPrimary}"
+                                    Offset="0,2" Radius="8" Opacity="0.06" />
+                        </Border.Shadow>
+                        <Grid ColumnDefinitions="88,*" ColumnSpacing="0" Padding="12">
+                            <Border Grid.Column="0"
+                                    StrokeShape="RoundRectangle 12"
+                                    Stroke="Transparent"
+                                    WidthRequest="88" HeightRequest="88"
+                                    BackgroundColor="{StaticResource SurfaceVariant}">
+                                <Image Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}"
+                                       Aspect="AspectFill" WidthRequest="88" HeightRequest="88" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center"
+                                                 Padding="12,0" Spacing="4">
+                                <Label Text="{Binding Title}" FontSize="15" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}"
+                                       LineBreakMode="TailTruncation" MaxLines="1" />
+                                <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                                       FontSize="16" FontAttributes="Bold"
+                                       TextColor="{StaticResource Primary}" />
+                                <Border BackgroundColor="{Binding Status, Converter={StaticResource StatusColorConverter}}"
+                                        StrokeShape="RoundRectangle 6"
+                                        Stroke="Transparent" Padding="8,3"
+                                        HorizontalOptions="Start">
+                                    <Label Text="{Binding Status}" TextColor="White"
+                                           FontSize="11" FontAttributes="Bold" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+</ContentPage>
