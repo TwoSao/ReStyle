@@ -22,17 +22,6 @@ public class ReStyleDbContext : DbContext
         modelBuilder.ApplyConfiguration(new TransactionConfiguration());
         modelBuilder.ApplyConfiguration(new BalanceTopUpConfiguration());
 
-        // Seed admin user
-        modelBuilder.Entity<User>().HasData(new User
-        {
-            UserId = 1,
-            Username = "admin",
-            Email = "admin@restyle.com",
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
-            Balance = 0,
-            Role = UserRole.Admin,
-            IsBlocked = false,
-            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-        });
+
     }
 }

@@ -9,6 +9,6 @@ public interface IItemService
     Task<ItemDto?> GetItemByIdAsync(int itemId);
     Task<IEnumerable<ItemDto>> SearchItemsAsync(string query, string? category = null, decimal? minPrice = null, decimal? maxPrice = null);
     Task<(bool Success, string Message, ItemDto? Item)> CreateItemAsync(int userId, CreateItemRequest request);
-    Task<(bool Success, string Message)> UpdateItemAsync(int itemId, int userId, UpdateItemRequest request);
+    Task<(bool Success, string Message)> UpdateItemAsync(int itemId, int userId, UpdateItemRequest request, bool isAdmin = false);
     Task<(bool Success, string Message)> DeleteItemAsync(int itemId, int userId, bool isAdmin = false);
 }

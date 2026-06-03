@@ -66,7 +66,8 @@ public partial class EditItemViewModel : ObservableObject
         IsBusy = true;
         var (success, message) = await _itemService.UpdateItemAsync(
             ItemId, _authService.CurrentUser!.UserId,
-            new UpdateItemRequest(Title, Description, price, ImagePath, Category, Size));
+            new UpdateItemRequest(Title, Description, price, ImagePath, Category, Size),
+            isAdmin: _authService.IsAdmin);
         IsBusy = false;
 
         if (!success) { ErrorMessage = message; return; }

@@ -90,5 +90,30 @@ public static class MauiProgram
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<ReStyleDbContext>();
         db.Database.EnsureCreated();
+
+        if (!db.Users.Any(u => u.Email == "admin@gmail.com"))
+        {
+            db.Users.Add(new ReStyle.Core.Entities.User
+            {
+                Username = "admin",
+                Email = "admin@gmail.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin1234!"),
+                Balance = 0,
+                Role = ReStyle.Core.Enums.UserRole.Admin,
+                IsBlocked = false,
+                CreatedAt = DateTime.UtcNow
+            });
+            db.SaveChanges();
+        }
+        else
+        {
+            // Если admin уже есть но со старым паролем — обновим
+            var admin = db.Users.First(u => u.Email == "admin@gmail.com");
+            if (!BCrypt.Net.BCrypt.Verify("admin1234!", admin.PasswordHash))
+            {
+                admin.PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin1234!");
+                db.SaveChanges();
+            }
+        }
     }
 }

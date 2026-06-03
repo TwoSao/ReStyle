@@ -50,10 +50,32 @@ public class NullToFalseConverter : IValueConverter
         throw new NotImplementedException();
 }
 
+public class IsNotSoldConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        !(value is ItemStatus status && status == ItemStatus.Sold);
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        throw new NotImplementedException();
+}
+
 public class BlockButtonTextConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
         value is bool blocked && blocked ? "Unblock" : "Block";
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        throw new NotImplementedException();
+}
+
+public class BlockButtonStyleConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        var key = value is bool blocked && blocked ? "SecondaryButton" : "DangerButton";
+        Microsoft.Maui.Controls.Application.Current!.Resources.TryGetValue(key, out var style);
+        return style ?? new Style(typeof(Button));
+    }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
         throw new NotImplementedException();

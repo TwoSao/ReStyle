@@ -26,4 +26,19 @@ public partial class MyItemsPage : ContentPage
         }
         await _vm.InitializeAsync();
     }
+
+    private void OnActiveTab(object? sender, EventArgs e) => SetTab(0);
+    private void OnSoldTab(object? sender, EventArgs e) => SetTab(1);
+
+    private void SetTab(int active)
+    {
+        var primary = (Color)Microsoft.Maui.Controls.Application.Current!.Resources["Primary"];
+        var secondary = (Color)Microsoft.Maui.Controls.Application.Current.Resources["TextSecondary"];
+
+        ActiveTabBg.BackgroundColor = active == 0 ? primary : Colors.Transparent;
+        SoldTabBg.BackgroundColor = active == 1 ? primary : Colors.Transparent;
+
+        ActiveList.IsVisible = active == 0;
+        SoldList.IsVisible = active == 1;
+    }
 }

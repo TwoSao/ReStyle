@@ -56,11 +56,11 @@ public class ItemService : IItemService
         return (true, "Item created.", new ItemDto(item.ItemId, item.Title, item.Description, item.Price, item.ImagePath, item.Status, item.Category, item.Size, item.CreatedAt, item.UserId, string.Empty));
     }
 
-    public async Task<(bool Success, string Message)> UpdateItemAsync(int itemId, int userId, UpdateItemRequest request)
+    public async Task<(bool Success, string Message)> UpdateItemAsync(int itemId, int userId, UpdateItemRequest request, bool isAdmin = false)
     {
         var item = await _itemRepo.GetByIdAsync(itemId);
         if (item == null) return (false, "Item not found.");
-        if (item.UserId != userId) return (false, "Unauthorized.");
+        if (!isAdmin && item.UserId != userId) return (false, "Unauthorized.");
 
         item.Title = request.Title.Trim();
         item.Description = request.Description.Trim();

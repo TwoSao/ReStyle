@@ -109,7 +109,7 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- ── Sticky Buy Bar ── -->
+        <!-- ── Sticky Bottom Bar ── -->
         <Border Grid.Row="1"
                 BackgroundColor="{StaticResource Surface}"
                 StrokeShape="RoundRectangle 0"
@@ -119,7 +119,7 @@
                 <Shadow Brush="{StaticResource TextPrimary}" Offset="0,-4" Radius="16" Opacity="0.08" />
             </Border.Shadow>
             <Grid RowDefinitions="Auto">
-                <!-- Buy button -->
+                <!-- Buy button (non-admin) -->
                 <Button Text="Buy Now"
                         Style="{StaticResource PrimaryButton}"
                         Command="{Binding BuyCommand}"
@@ -128,12 +128,26 @@
                         HorizontalOptions="Fill" />
                 <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
                                    HorizontalOptions="Center" Margin="8,0" />
-                <!-- Already sold / own item -->
-                <Border IsVisible="{Binding CanBuy, Converter={StaticResource InverseBoolConverter}}"
-                        BackgroundColor="{StaticResource SurfaceVariant}"
+                <!-- Admin actions -->
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10"
+                      IsVisible="{Binding IsAdmin}">
+                    <Button Grid.Column="0"
+                            Text="Edit"
+                            Style="{StaticResource SecondaryButton}"
+                            Command="{Binding EditCommand}"
+                            HorizontalOptions="Fill" />
+                    <Button Grid.Column="1"
+                            Text="Delete"
+                            Style="{StaticResource DangerButton}"
+                            Command="{Binding DeleteCommand}"
+                            WidthRequest="90" />
+                </Grid>
+                <!-- Not available (non-admin, can't buy) -->
+                <Border BackgroundColor="{StaticResource SurfaceVariant}"
                         StrokeShape="RoundRectangle 14"
                         Stroke="{StaticResource Border}"
-                        Padding="16,14">
+                        Padding="16,14"
+                        IsVisible="{Binding ShowNotAvailable}">
                     <Label Text="Not available for purchase"
                            FontSize="14" TextColor="{StaticResource TextTertiary}"
                            HorizontalOptions="Center" />

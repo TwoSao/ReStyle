@@ -8,109 +8,66 @@
 
     <ContentPage.Resources>
         <conv:BlockButtonTextConverter x:Key="BlockButtonTextConverter" />
+        <conv:BlockButtonStyleConverter x:Key="BlockButtonStyleConverter" />
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,*">
-
-        <!-- Tab bar -->
-        <Border Grid.Row="0" BackgroundColor="{StaticResource Surface}"
-                StrokeShape="RoundRectangle 0" Stroke="Transparent"
-                Padding="16,12,16,0">
-            <Border.Shadow>
-                <Shadow Brush="{StaticResource TextPrimary}" Offset="0,2" Radius="8" Opacity="0.05" />
-            </Border.Shadow>
-            <Border BackgroundColor="{StaticResource SurfaceVariant}"
-                    StrokeShape="RoundRectangle 12" Stroke="Transparent"
-                    Padding="4" HeightRequest="48">
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="0">
-                    <Border Grid.Column="0" x:Name="UsersTabBg"
-                            BackgroundColor="{StaticResource Primary}"
-                            StrokeShape="RoundRectangle 10" Stroke="Transparent">
-                        <Button Text="Users" BackgroundColor="Transparent"
-                                TextColor="White" FontSize="14" FontAttributes="Bold"
-                                BorderWidth="0" HeightRequest="40"
-                                Clicked="OnUsersTab" />
-                    </Border>
-                    <Border Grid.Column="1" x:Name="TxTabBg"
-                            BackgroundColor="Transparent"
-                            StrokeShape="RoundRectangle 10" Stroke="Transparent">
-                        <Button Text="Transactions" BackgroundColor="Transparent"
-                                TextColor="{StaticResource TextSecondary}"
-                                FontSize="14" BorderWidth="0" HeightRequest="40"
-                                Clicked="OnTransactionsTab" />
-                    </Border>
-                </Grid>
-            </Border>
-        </Border>
-
-        <!-- Users list -->
-        <CollectionView Grid.Row="1" x:Name="UsersList" Margin="16,8">
-            <CollectionView.EmptyView>
-                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
-                                     Spacing="12" Margin="0,80">
-                    <Label Text="👥" FontSize="72" HorizontalOptions="Center" />
-                    <Label Text="No users found" Style="{StaticResource H2Label}"
-                           HorizontalOptions="Center" />
-                </VerticalStackLayout>
-            </CollectionView.EmptyView>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="dto:UserDto">
-                    <Border Margin="0,5"
-                            BackgroundColor="{StaticResource Surface}"
-                            StrokeShape="RoundRectangle 16"
-                            Stroke="{StaticResource Border}" StrokeThickness="1">
-                        <Border.Shadow>
-                            <Shadow Brush="{StaticResource TextPrimary}"
-                                    Offset="0,2" Radius="8" Opacity="0.05" />
-                        </Border.Shadow>
-                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="0" Padding="14">
-                            <!-- Avatar -->
-                            <Border Grid.Column="0"
-                                    BackgroundColor="{StaticResource PrimarySubtle}"
-                                    StrokeShape="RoundRectangle 22"
-                                    Stroke="Transparent"
-                                    WidthRequest="44" HeightRequest="44"
-                                    Margin="0,0,12,0">
-                                <Label Text="👤" FontSize="20"
-                                       HorizontalOptions="Center" VerticalOptions="Center" />
+    <CollectionView x:Name="UsersList" ItemsSource="{Binding Users}" Margin="16,8">
+        <CollectionView.EmptyView>
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
+                                 Spacing="12" Margin="0,80">
+                <Label Text="👥" FontSize="72" HorizontalOptions="Center" />
+                <Label Text="No users found" Style="{StaticResource H2Label}"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </CollectionView.EmptyView>
+        <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="dto:UserDto">
+                <Border Margin="0,5"
+                        BackgroundColor="{StaticResource Surface}"
+                        StrokeShape="RoundRectangle 16"
+                        Stroke="{StaticResource Border}" StrokeThickness="1">
+                    <Border.Shadow>
+                        <Shadow Brush="{StaticResource TextPrimary}"
+                                Offset="0,2" Radius="8" Opacity="0.05" />
+                    </Border.Shadow>
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="0" Padding="14">
+                        <!-- Avatar -->
+                        <Border Grid.Column="0"
+                                BackgroundColor="{StaticResource PrimarySubtle}"
+                                StrokeShape="RoundRectangle 22"
+                                Stroke="Transparent"
+                                WidthRequest="44" HeightRequest="44"
+                                Margin="0,0,12,0">
+                            <Label Text="👤" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <!-- Info -->
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                            <Label Text="{Binding Username}"
+                                   FontSize="14" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="{Binding Email}"
+                                   FontSize="12" TextColor="{StaticResource TextTertiary}"
+                                   LineBreakMode="TailTruncation" MaxLines="1" />
+                            <Border BackgroundColor="{StaticResource PrimarySubtle}"
+                                    StrokeShape="RoundRectangle 6"
+                                    Stroke="Transparent" Padding="6,2"
+                                    HorizontalOptions="Start">
+                                <Label Text="{Binding Role}" FontSize="10" FontAttributes="Bold"
+                                       TextColor="{StaticResource Primary}" />
                             </Border>
-                            <!-- Info -->
-                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                                <Label Text="{Binding Username}"
-                                       FontSize="14" FontAttributes="Bold"
-                                       TextColor="{StaticResource TextPrimary}" />
-                                <Label Text="{Binding Email}"
-                                       FontSize="12" TextColor="{StaticResource TextTertiary}"
-                                       LineBreakMode="TailTruncation" MaxLines="1" />
-                                <Border BackgroundColor="{StaticResource PrimarySubtle}"
-                                        StrokeShape="RoundRectangle 6"
-                                        Stroke="Transparent" Padding="6,2"
-                                        HorizontalOptions="Start">
-                                    <Label Text="{Binding Role}" FontSize="10" FontAttributes="Bold"
-                                           TextColor="{StaticResource Primary}" />
-                                </Border>
-                            </VerticalStackLayout>
-                            <!-- Block button -->
-                            <Button Grid.Column="2"
-                                    Text="{Binding IsBlocked, Converter={StaticResource BlockButtonTextConverter}}"
-                                    Style="{StaticResource SecondaryButton}"
-                                    HeightRequest="36" Padding="12,0" FontSize="12"
-                                    Margin="6,0"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.BlockUserCommand}"
-                                    CommandParameter="{Binding .}" />
-                            <!-- Delete button -->
-                            <Button Grid.Column="3"
-                                    Text="✕"
-                                    Style="{StaticResource DangerButton}"
-                                    HeightRequest="36" WidthRequest="36"
-                                    Padding="0" FontSize="14"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteUserCommand}"
-                                    CommandParameter="{Binding .}" />
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                        </VerticalStackLayout>
+                        <!-- Block/Unblock button -->
+                        <Button Grid.Column="2"
+                                Text="{Binding IsBlocked, Converter={StaticResource BlockButtonTextConverter}}"
+                                Style="{Binding IsBlocked, Converter={StaticResource BlockButtonStyleConverter}}"
+                                HeightRequest="36" Padding="14,0" FontSize="12"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.BlockUserCommand}"
+                                CommandParameter="{Binding .}" />
+                    </Grid>
+                </Border>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
 
-    </Grid>
 </ContentPage>

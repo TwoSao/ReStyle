@@ -15,6 +15,7 @@ public partial class MyItemsViewModel : ObservableObject, IRecipient<ItemsChange
     private readonly IServiceProvider _services;
 
     [ObservableProperty] private ObservableCollection<ItemDto> _items = new();
+    [ObservableProperty] private ObservableCollection<ItemDto> _soldItems = new();
     [ObservableProperty] private bool _isBusy;
 
     public MyItemsViewModel(IAuthService authService, IServiceProvider services)
@@ -33,8 +34,9 @@ public partial class MyItemsViewModel : ObservableObject, IRecipient<ItemsChange
         IsBusy = true;
         using var scope = _services.CreateScope();
         var itemService = scope.ServiceProvider.GetRequiredService<IItemService>();
-        var items = await itemService.GetMyItemsAsync(_authService.CurrentUser.UserId);
-        Items = new ObservableCollection<ItemDto>(items);
+        var all = (await itemService.GetMyItemsAsync(_authService.CurrentUser.UserId)).ToList();
+        Items = new ObservableCollection<ItemDto>(all.Where(i => i.Status != ReStyle.Core.Enums.ItemStatus.Sold));
+        SoldItems = new ObservableCollection<ItemDto>(all.Where(i => i.Status == ReStyle.Core.Enums.ItemStatus.Sold));
         IsBusy = false;
     }
 
